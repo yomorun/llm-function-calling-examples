@@ -20,3 +20,7 @@
 # Go workspace file
 go.work
 go.work.sum
+
+# yomo related
+*.yomo
+yc.yml*
