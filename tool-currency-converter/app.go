@@ -13,11 +13,28 @@ import (
 	"github.com/yomorun/yomo/serverless"
 )
 
-// DataTags specifies the data tags to which this serverless function
-// subscribes, essential for data reception. Upon receiving data with these
-// tags, the Handler function is triggered.
-func DataTags() []uint32 {
-	return []uint32{0x61}
+// Description outlines the functionality for the LLM Function Calling feature.
+// It provides a detailed description of the function's purpose, essential for
+// integration with LLM Function Calling. The presence of this function and its
+// return value make the function discoverable and callable within the LLM
+// ecosystem. For more information on Function Calling, refer to the OpenAI
+// documentation at: https://platform.openai.com/docs/guides/function-calling
+func Description() string {
+	return `if user asks currency exchange rate related questions, you should call this function. But if the source currency is other than USD (US Dollar), you should ignore calling tools.`
+}
+
+// Parameter defines the arguments for the LLM Function Calling.
+type Parameter struct {
+	SourceCurrency string  `json:"source" jsonschema:"description=The source currency to be queried in 3-letter ISO 4217 format"`
+	TargetCurrency string  `json:"target" jsonschema:"description=The target currency to be queried in 3-letter ISO 4217 format"`
+	Amount         float64 `json:"amount" jsonschema:"description=The amount of the currency to be converted to the target currency"`
+}
+
+// InputSchema defines the argument structure for LLM Function Calling. It
+// utilizes jsonschema tags to detail the definition. For jsonschema in Go,
+// see https://github.com/invopop/jsonschema.
+func InputSchema() any {
+	return &Parameter{}
 }
 
 // Init is an optional function invoked during the initialization phase of the
@@ -37,30 +54,6 @@ func Init() error {
 		}
 	}
 	return nil
-}
-
-// Parameter defines the arguments for the LLM Function Calling.
-type Parameter struct {
-	SourceCurrency string  `json:"source" jsonschema:"description=The source currency to be queried in 3-letter ISO 4217 format"`
-	TargetCurrency string  `json:"target" jsonschema:"description=The target currency to be queried in 3-letter ISO 4217 format"`
-	Amount         float64 `json:"amount" jsonschema:"description=The amount of the currency to be converted to the target currency"`
-}
-
-// Description outlines the functionality for the LLM Function Calling feature.
-// It provides a detailed description of the function's purpose, essential for
-// integration with LLM Function Calling. The presence of this function and its
-// return value make the function discoverable and callable within the LLM
-// ecosystem. For more information on Function Calling, refer to the OpenAI
-// documentation at: https://platform.openai.com/docs/guides/function-calling
-func Description() string {
-	return `if user asks currency exchange rate related questions, you should call this function. But if the source currency is other than USD (US Dollar), you should ignore calling tools.`
-}
-
-// InputSchema defines the argument structure for LLM Function Calling. It
-// utilizes jsonschema tags to detail the definition. For jsonschema in Go,
-// see https://github.com/invopop/jsonschema.
-func InputSchema() any {
-	return &Parameter{}
 }
 
 // Handler orchestrates the core processing logic of this function.
@@ -131,4 +124,11 @@ func getRates(targetCurrency string, rates *Rates) (float64, error) {
 	}
 
 	return 0, fmt.Errorf("can not get the target currency, target currency is %s", targetCurrency)
+}
+
+// DataTags specifies the data tags to which this serverless function
+// subscribes, essential for data reception. Upon receiving data with these
+// tags, the Handler function is triggered.
+func DataTags() []uint32 {
+	return []uint32{0x61}
 }
