@@ -25,3 +25,4 @@ go.work.sum
 # yomo related
 *.yomo
 yc.yml*yc.yml
+yc.yml
