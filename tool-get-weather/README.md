@@ -116,7 +116,7 @@ Accelerating your LLM tools will improve user experience and increase user engag
 
 ### Deploy to every data region just in one command
 
-`yc deploy app.go --envs OPENWEATHERMAP_API_KEY=<your-openweathermap.org-api-key>`
+`yc deploy app.go --env OPENWEATHERMAP_API_KEY=<your-openweathermap.org-api-key>`
 
 ### Realtime logs
 

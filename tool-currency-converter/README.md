@@ -147,7 +147,7 @@ Accelerating your LLM tools will improve user experience and increase user engag
 
 ### Deploy to every data region just in one command
 
-`yc deploy app.go --envs API_KEY=<your-openexchangerates.org-api-key>`
+`yc deploy app.go --env API_KEY=<your-openexchangerates.org-api-key>`
 
 ### Realtime logs
 
