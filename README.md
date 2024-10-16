@@ -9,7 +9,7 @@ YoMo support multiple LLM providers, like Ollama, Mistral, Llama, Azure OpenAI, 
 ## Examples List
 
 - [tool-get-utc-time](./tool-get-utc-time): Get the UTC time by city name.
-- [too-currency-converter](./tool-currency-converter): Currency Calculator by 3rd party API.
+- [tool-currency-converter](./tool-currency-converter): Currency Calculator by 3rd party API.
 - [tool-get-weather](./tool-get-weather): Get the weather information by city name by 3rd party API.
 - [tool-timezone-calculator](./tool-timezone-calculator): Calculate the timezone for a specific time.
 - [tool-get-ip-and-latency](./tool-get-ip-and-latency): Get IP and Latency by give website name like "Nike" and "Amazone" by `ping` command.
