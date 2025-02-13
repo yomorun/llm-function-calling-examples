@@ -49,7 +49,7 @@ curl https://api.vivgrid.com/v1/chat/completions \
   }'
 ```
 
-Based on the real time weather ifo, you may get response like:
+You may get response like:
 
 ```json
 {
