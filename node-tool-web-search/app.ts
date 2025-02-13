@@ -44,7 +44,7 @@ export async function handler(args: Argument) {
         })
     )
     result = result.filter((item) => item.title)
-    console.log(JSON.stringify(result))
+    console.log("fetch result", result.length)
     return result
 
   } catch (err) {

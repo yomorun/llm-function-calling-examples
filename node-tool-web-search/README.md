@@ -43,7 +43,7 @@ curl https://api.vivgrid.com/v1/chat/completions \
     "messages": [
       {
         "role": "user",
-        "content": "How did the stock market perform today?"
+        "content": "How did the stock market perform in 2025.1.13?"
       }
     ]
   }'
@@ -52,5 +52,91 @@ curl https://api.vivgrid.com/v1/chat/completions \
 Based on the real time weather ifo, you may get response like:
 
 ```json
-{"id":"chatcmpl-B0TzKPnHZm6mjSdS7I0Eiyu1zf3Fi","object":"chat.completion","created":1739454974,"model":"gpt-4o-2024-08-06","choices":[{"index":0,"message":{"role":"assistant","content":"Today, October 26, 2023, the stock market experienced declines. The S\u0026P 500 fell by approximately 1.2%, coming close to a correction as it digested stronger-than-expected U.S. GDP data. Meanwhile, the tech-heavy Nasdaq Composite declined around 1.8%, marking its most significant two-day drop since December 2022, primarily influenced by weaker-than-expected cloud sales growth from Alphabet. The Dow Jones Industrial Average dropped 0.8% as well. Overall, the S\u0026P 500 lost 60.91 points (1.4%) to close at 4,186.77, and the Nasdaq plunged by 318.65 points (2.4%) to 12,821.22. The Dow Jones fell by 105.45 points (0.3%) to close at 33,035.93.\n\nThe market's performance was influenced by economic data showing a 4.9% annualized GDP growth rate in the third quarter and heightened concerns over interest rates as Treasury yields climbed."},"finish_reason":"stop","content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"},"jailbreak":{"filtered":false,"detected":false},"profanity":{"filtered":false,"detected":false}}}],"usage":{"prompt_tokens":4665,"completion_tokens":239,"total_tokens":4788,"prompt_tokens_details":{"audio_tokens":0,"cached_tokens":0},"completion_tokens_details":{"audio_tokens":0,"reasoning_tokens":0}},"system_fingerprint":"fp_f3927aa00d","prompt_filter_results":[{"index":0,"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"},"jailbreak":{"filtered":false,"detected":false},"profanity":{"filtered":false,"detected":false}}}]}
+{
+  "id": "chatcmpl-B0UuxQ3FXgrDXb4Gk4S21EfglS1BT",
+  "object": "chat.completion",
+  "created": 1739458547,
+  "model": "gpt-4o-2024-08-06",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "On January 13, 2025, the stock market experienced mixed performances. The Dow Jones Industrial Average rose by 0.9%, while the S\u0026P 500 rebounded from earlier losses to close up 0.2%. However, the Nasdaq Composite fell 0.4%. The tech sector, particularly chip stocks, weighed down on the markets. Concerns were prevalent about the Federal Reserve's next move on interest rates, especially after a strong jobs report earlier raised doubts about potential rate cuts. The market dynamics were also influenced by pending economic data on inflation and the Consumer Price Index scheduled for that week."
+      },
+      "finish_reason": "stop",
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "filtered": false,
+          "detected": false
+        },
+        "profanity": {
+          "filtered": false,
+          "detected": false
+        }
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 3850,
+    "completion_tokens": 148,
+    "total_tokens": 3875,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "audio_tokens": 0,
+      "reasoning_tokens": 0
+    }
+  },
+  "system_fingerprint": "fp_f3927aa00d",
+  "prompt_filter_results": [
+    {
+      "index": 0,
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "filtered": false,
+          "detected": false
+        },
+        "profanity": {
+          "filtered": false,
+          "detected": false
+        }
+      }
+    }
+  ]
+}
 ```
