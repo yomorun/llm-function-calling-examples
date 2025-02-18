@@ -1,7 +1,6 @@
 import { load as cheerioLoad } from "cheerio";
 import { env } from "process";
-import { json } from "stream/consumers";
-import { setGlobalDispatcher, ProxyAgent } from "undici";
+import { ProxyAgent, setGlobalDispatcher } from "undici";
 
 // https://stackoverflow.com/questions/72306101/make-a-request-in-native-fetch-with-proxy-in-nodejs-18
 if (env.https_proxy) {
@@ -11,7 +10,7 @@ if (env.https_proxy) {
 
 export const description = `A custom search engine designed to answer questions about current events. The input is a search query, and the output is a JSON array of results.`;
 
-export const tag = 0x33;
+export const tag = 0x34;
 
 export type Argument = {
   /**
@@ -33,8 +32,11 @@ export async function handler(args: Argument) {
       resp
         .filter((item) => item.link)
         .map(async (item) => {
+          console.log(`Reading link [${item.title}]: ${item.link}`)
           const html = await fetchWebPage(item.link as string)
           const content = extractHtml(html, item.snippet as string)
+
+          console.log(`\t->[${content.title}] ${content.content.slice(0, 100)}`)
 
           return {
             link: item.link,
@@ -45,7 +47,7 @@ export async function handler(args: Argument) {
     )
     result = result.filter((item) => item.title)
     console.log("fetch result", result.length)
-    return result
+    return JSON.stringify(result)
 
   } catch (err) {
     console.error(err)
@@ -72,7 +74,7 @@ function extractHtml(html: string, defaultContent: string) {
   $("script, style, nav, footer, header").remove();
 
   // extract title
-  const title = $("title").text() || "";
+  const title = cleanText($("title").text() || "");
 
   // try to find main content
   let mainContent = $("main, article, .content").first();
@@ -129,4 +131,11 @@ type searchResult = {
   title?: string;
   link?: string;
   snippet?: string;
+}
+
+function cleanText(title: string): string {
+  return title
+    .replace(/[\r\n\t]+/g, ' ')  // Replace newlines and tabs with space
+    .replace(/\s+/g, ' ')        // Replace multiple spaces with single space
+    .trim();                     // Remove leading/trailing whitespace
 }
