@@ -1,0 +1,21 @@
+{
+  "name": "tool-node-send-mail",
+  "version": "1.0.0",
+  "description": "LLM Function Calling - Send Email",
+  "main": ".wrapper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/nodemailer": "^6.4.14",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@yomo/sfn": "^1.0.5",
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.9.12"
+  }
+}
