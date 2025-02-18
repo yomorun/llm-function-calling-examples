@@ -1,0 +1,20 @@
+{
+  "name": "tool-node-get-ip-and-latency",
+  "version": "1.0.0",
+  "description": "LLM Function Calling - Get IP and Latency",
+  "main": ".wrapper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/ping": "^0.4.4",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@yomo/sfn": "^1.0.5",
+    "ping": "^0.4.4"
+  }
+}
