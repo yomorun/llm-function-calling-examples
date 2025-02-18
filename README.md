@@ -1,6 +1,6 @@
 # LLM Function Calling Examples
 
-This repository contains examples of how to create a LLM (Large Language Model) Function Calling serverless by [YoMo framework](https://github.com/yomorun/yomo). 
+This repository contains examples of how to create a LLM (Large Language Model) Function Calling serverless by [YoMo framework](https://github.com/yomorun/yomo).
 
 ## Write Once, Run on any Model
 
@@ -12,6 +12,8 @@ YoMo support multiple LLM providers, like Ollama, Mistral, Llama, Azure OpenAI, 
 
 - [node-tool-get-weather](./node-tool-get-weather): Get the weather information by city name by 3rd party API.
 - [node-tool-currency-converter](./node-tool-currency-converter): Currency Calculator by 3rd party API.
+- [node-tool-get-utc-time](./node-tool-get-utc-time): Get the UTC time by city name.
+- [node-tool-get-ip-and-latency](./node-tool-get-ip-and-latency): Get IP and Latency by give website name like "Nike" and "Amazone" by `ping` command.
 
 ### Golang
 
