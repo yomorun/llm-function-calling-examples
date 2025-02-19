@@ -1,6 +1,6 @@
-# LLM Function Calling - Send Email
+# LLM Function Calling - Send Email with SMTP
 
-This is a serverless function for sending emails.
+This is a serverless function for sending emails with SMTP.
 
 ## Prerequisites
 

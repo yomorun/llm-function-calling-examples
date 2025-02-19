@@ -1,6 +1,6 @@
-# LLM Function Calling - Send Email
+# LLM Function Calling - Send Email with SMTP
 
-This is a serverless function for sending emails.
+This is a serverless function for sending emails with SMTP.
 
 ## Prerequisites
 
@@ -63,7 +63,7 @@ curl --request POST \
 ### 4. Connect this Function to Your LLM Bridge
 
 ```bash
-yomo run app.go -n my_first_llm_function_tool
+yomo run app.ts -n my_first_llm_function_tool
 ```
 
 ## Web Interface
