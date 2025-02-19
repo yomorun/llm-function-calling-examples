@@ -14,7 +14,9 @@ YoMo support multiple LLM providers, like Ollama, Mistral, Llama, Azure OpenAI, 
 - [node-tool-currency-converter](./node-tool-currency-converter): Currency Calculator by 3rd party API.
 - [node-tool-get-utc-time](./node-tool-get-utc-time): Get the UTC time by city name.
 - [node-tool-get-ip-and-latency](./node-tool-get-ip-and-latency): Get IP and Latency by give website name like "Nike" and "Amazone" by `ping` command.
-- [node-tool-send-mail](./node-tool-send-mail): Send email by `nodemailer` and `maildev`.
+- [node-tool-send-mail-smtp](./node-tool-send-mail-smtp): Send email by `nodemailer` and `maildev`.
+- [node-tool-send-mail-resend](./node-tool-send-mail-resend): Send email by `resend`.
+- [node-tool-web-search](./node-tool-web-search): Search the web by Google Custom Search Engine.
 
 ### Golang
 
@@ -23,7 +25,8 @@ YoMo support multiple LLM providers, like Ollama, Mistral, Llama, Azure OpenAI, 
 - [golang-tool-get-utc-time](./golang-tool-get-utc-time): Get the UTC time by city name.
 - [golang-tool-timezone-calculator](./golang-tool-timezone-calculator): Calculate the timezone for a specific time.
 - [golang-tool-get-ip-and-latency](./golang-tool-get-ip-and-latency): Get IP and Latency by give website name like "Nike" and "Amazone" by `ping` command.
-- [golang-tool-send-mail](./golang-tool-send-mail): Send email by `nodemailer` and `maildev`.
+- [golang-tool-send-mail-smtp](./golang-tool-send-mail-smtp): Send email by smtp.
+- [golang-tool-send-mail-resend](./golang-tool-send-mail-resend): Send email by `resend`.
 
 ## Self Hosting
 
