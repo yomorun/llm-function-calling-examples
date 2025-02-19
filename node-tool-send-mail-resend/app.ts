@@ -1,0 +1,47 @@
+import * as dotenv from 'dotenv';
+import { Resend } from 'resend';
+
+dotenv.config();
+
+// Description outlines the functionality for the LLM Function Calling feature
+export const description = `This function is called when users need to send emails using Resend. You need to determine if the user's input contains complete email information (recipient, subject, content).
+If the information is incomplete, you should ask for the missing information.`;
+
+// Define the parameter structure for the LLM Function Calling
+interface Argument {
+  to: string;
+  subject: string;
+  body: string;
+}
+
+// Tag specifies the data tag that this serverless function
+// subscribes to, which is essential for data reception.
+export const tag = 0x66;
+
+async function sendEmail(args: Argument): Promise<string> {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: process.env.FROM_EMAIL || 'onboarding@resend.dev',
+      to: args.to,
+      subject: args.subject,
+      html: `<p>${args.body}</p>`
+    });
+
+    return `Email has been successfully sent to ${args.to}`;
+  } catch (error) {
+    console.error('Failed to send email:', error);
+    return 'Failed to send email, please try again later';
+  }
+}
+
+/**
+ * Handler orchestrates the core processing logic of this function.
+ * @param args - LLM Function Calling Arguments.
+ * @returns The result of the email sending operation.
+ */
+export async function handler(args: Argument): Promise<string> {
+  const result = await sendEmail(args);
+  return result;
+}
