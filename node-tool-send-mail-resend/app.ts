@@ -1,38 +1,38 @@
-import * as dotenv from 'dotenv';
-import { Resend } from 'resend';
+import * as dotenv from 'dotenv'
+import { Resend } from 'resend'
 
-dotenv.config();
+dotenv.config()
 
 // Description outlines the functionality for the LLM Function Calling feature
-export const description = `This function is called when users need to send emails using Resend. You need to determine if the user's input contains complete email information (recipient, subject, content).
-If the information is incomplete, you should ask for the missing information.`;
+export const description = `Generate and send emails. Please provide the recipient's email address, and you should help generate appropriate subject and content. If no recipient address is provided, You should ask to add one. When you generate the subject and content, you should send it through the email sending function.`
 
 // Define the parameter structure for the LLM Function Calling
 interface Argument {
-  to: string;
-  subject: string;
-  body: string;
+  to: string
+  subject: string
+  body: string
 }
 
 // Tag specifies the data tag that this serverless function
 // subscribes to, which is essential for data reception.
-export const tag = 0x66;
+export const tag = 0x66
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 async function sendEmail(args: Argument): Promise<string> {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
+    console.log('Sending email to:', args.to)
     await resend.emails.send({
       from: process.env.FROM_EMAIL || 'onboarding@resend.dev',
       to: args.to,
       subject: args.subject,
-      html: `<p>${args.body}</p>`
-    });
+      html: `<p>${args.body}</p>`,
+    })
 
-    return `Email has been successfully sent to ${args.to}`;
+    return `Email has been successfully sent to ${args.to}`
   } catch (error) {
-    console.error('Failed to send email:', error);
-    return 'Failed to send email, please try again later';
+    console.error('Failed to send email:', error)
+    return 'Failed to send email, please try again later'
   }
 }
 
@@ -42,6 +42,6 @@ async function sendEmail(args: Argument): Promise<string> {
  * @returns The result of the email sending operation.
  */
 export async function handler(args: Argument): Promise<string> {
-  const result = await sendEmail(args);
-  return result;
+  const result = await sendEmail(args)
+  return result
 }

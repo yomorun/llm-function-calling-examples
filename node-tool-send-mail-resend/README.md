@@ -45,11 +45,10 @@ curl --request POST \
   --header 'Authorization: Bearer <token>' \
   --header 'content-type: application/json' \
   --data '{
-  "model": "gpt-4o",
   "messages": [
     {
       "role": "assistant",
-      "content": "send an email to hello@example.com, subject is '\''hello'\'', body is '\''world'\''"
+      "content": "send an email to mark@example.com, tell him I will attend the meeting"
     }
   ]
 }'

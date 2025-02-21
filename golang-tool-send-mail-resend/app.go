@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"log/slog"
 	"os"
 
@@ -12,17 +13,37 @@ import (
 
 // Description outlines the functionality for the LLM Function Calling feature.
 func Description() string {
-	return `This function is called when users need to send emails using Resend. You need to determine if the user's input contains complete email information (recipient, subject, content).
-If the information is incomplete, you should ask for the missing information.`
+	return `Generate and send emails. Please provide the recipient's email address, and you should help generate appropriate subject and content. If no recipient address is provided, You should ask to add one. When you generate the subject and content, you should send it through the email sending function.`
 }
 
 // InputSchema defines the argument structure for LLM Function Calling
 func InputSchema() any {
-	return &LLMArguments{}
+	return &Parameter{}
 }
 
-// LLMArguments defines the arguments for the LLM Function Calling
-type LLMArguments struct {
+var client *resend.Client
+
+// Init is an optional function invoked during the initialization phase of the
+// sfn instance. It's designed for setup tasks like global variable
+// initialization, establishing database connections, or loading models into
+// GPU memory. If initialization fails, the sfn instance will halt and
+// terminate. This function can be omitted if no initialization tasks are
+// needed.
+func Init() error {
+	if _, ok := os.LookupEnv("RESEND_API_KEY"); !ok {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("You have to set RESEND_API_KEY in ENV or .env file")
+			os.Exit(-1)
+		}
+	}
+
+	client = resend.NewClient(os.Getenv("RESEND_API_KEY"))
+	return nil
+}
+
+// Parameter defines the arguments for the LLM Function Calling
+type Parameter struct {
 	To      string `json:"to" jsonschema:"description=The recipient's email address"`
 	Subject string `json:"subject" jsonschema:"description=The subject of the email"`
 	Body    string `json:"body" jsonschema:"description=The content of the email"`
@@ -30,7 +51,7 @@ type LLMArguments struct {
 
 // Handler orchestrates the core processing logic of this function
 func Handler(ctx serverless.Context) {
-	var args LLMArguments
+	var args Parameter
 	ctx.ReadLLMArguments(&args)
 
 	result, err := sendEmail(args)
@@ -43,12 +64,12 @@ func Handler(ctx serverless.Context) {
 	slog.Info("send-email", "to", args.To, "result", result)
 }
 
-func sendEmail(args LLMArguments) (string, error) {
+func sendEmail(args Parameter) (string, error) {
 	if err := godotenv.Load(); err != nil {
 		slog.Warn("Error loading .env file", "error", err)
 	}
 
-	client := resend.NewClient(os.Getenv("RESEND_API_KEY"))
+	slog.Info("send-email", "args", args)
 
 	params := &resend.SendEmailRequest{
 		From:    os.Getenv("FROM_EMAIL"),

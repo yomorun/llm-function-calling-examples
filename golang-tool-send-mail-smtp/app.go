@@ -11,8 +11,7 @@ import (
 
 // Description describes the functionality of this Function Calling
 func Description() string {
-	return `This function is called when users need to send emails. You need to determine if the user's input contains complete email information (recipient, subject, content).
-	If the information is incomplete, you should ask for the missing information.`
+	return `Generate and send emails. Please provide the recipient's email address, and you should help generate appropriate subject and content. If no recipient address is provided, You should ask to add one. When you generate the subject and content, you should send it through the email sending function.`
 }
 
 // Parameter defines the required parameters for sending emails
@@ -30,6 +29,8 @@ func InputSchema() any {
 func Handler(ctx serverless.Context) {
 	var msg Parameter
 	ctx.ReadLLMArguments(&msg)
+
+	slog.Info("send-mail", "msg", msg)
 
 	// Get email configuration from environment variables
 	smtpHost := os.Getenv("SMTP_HOST")
