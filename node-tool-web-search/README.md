@@ -2,7 +2,7 @@
 
 This is a serverless function for web searching.
 
-You can obtain your `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` by following this [article](https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search), then, add them to your `.env` file:
+You can obtain your `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` by following this [article](https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search), you can also obtain `TAVILY_API_KEY` from [tavily](https://tavily.com/), then, add them to your `.env` file:
 
 ```sh
 YOMO_SFN_NAME=web-search
@@ -10,7 +10,13 @@ YOMO_SFN_ZIPPER="zipper.vivgrid.com:9000"
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
 GOOGLE_API_KEY=
 GOOGLE_CSE_ID=
+TAVILY_API_KEY=
 ```
+
+The serverless function will use the following search engines based on the keys provided:
+  - If `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` are provided, the function will use the Google search engine.
+- If `TAVILY_API_KEY` is provided, the function will use the Tavily search engine.
+- If none of the above keys are provided, the function will default to using the [DuckDuckGo](https://github.com/Snazzah/duck-duck-scrape) engine.
 
 Other environment variables can be found in the [vivgrid dashboard](https://dashboard.vivgrid.com/) serverless page
 

@@ -1,32 +1,134 @@
-import { load as cheerioLoad } from "cheerio";
+import { tavily, TavilyClient } from '@tavily/core';
 import { env } from "process";
-import { ProxyAgent, setGlobalDispatcher } from "undici";
+import { load as cheerioLoad } from "cheerio";
+import { search, SafeSearchType } from "duck-duck-scrape";
 
-// https://stackoverflow.com/questions/72306101/make-a-request-in-native-fetch-with-proxy-in-nodejs-18
-if (env.https_proxy) {
-  const dispatcher = new ProxyAgent({ uri: new URL(env.https_proxy).toString() });
-  setGlobalDispatcher(dispatcher);
+export const description = 'A custom search engine designed to answer questions about current events. The input is a search query, and the output is a JSON array of results.'
+
+enum Topic {
+  General = "general",
+  News = "news",
+  Finance = "finance"
 }
 
-export const description = `A custom search engine designed to answer questions about current events. The input is a search query, and the output is a JSON array of results.`;
-
-export const tag = 0x34;
-
+// For jsonschema in TypeScript, see: https://github.com/YousefED/typescript-json-schema
 export type Argument = {
   /**
-   * The search query.
+   * The search query
    */
   input: string;
-};
-
-const GOOGLE_API_KEY = env.GOOGLE_API_KEY
-const GOOGLE_CSE_ID = env.GOOGLE_CSE_ID
-console.log(`GOOGLE_API_KEY=${GOOGLE_API_KEY}, GOOGLE_CSE_ID=${GOOGLE_CSE_ID}`)
+  /**
+   * The topic to be queried
+   */
+  topic: Topic
+}
 
 export async function handler(args: Argument) {
+  console.log(JSON.stringify(args))
+  const searchEngine = createSearchEngine(env as ENV)
+
   try {
-    console.log(args)
-    const resp = await googleSearch(args.input);
+    const result = await searchEngine.Search(args.input, args.topic)
+    console.log(JSON.stringify(result))
+    return result
+  } catch (err) {
+    console.error(err)
+    return { error: err }
+  }
+}
+
+interface SearchEngine {
+  Search(query: string, topic: Topic): Promise<SearchResult[]>
+}
+
+type ENV = {
+  GOOGLE_API_KEY?: string,
+  GOOGLE_CSE_ID?: string,
+  TAVILY_API_KEY?: string,
+}
+
+function createSearchEngine(env: ENV): SearchEngine {
+  if (env.GOOGLE_API_KEY && env.GOOGLE_CSE_ID) {
+    console.log('Using Google Search Engine')
+    return new GoogleSearch(env.GOOGLE_API_KEY, env.GOOGLE_CSE_ID)
+  } else if (env.TAVILY_API_KEY) {
+    console.log('Using Tavily Search Engine')
+    return new TavilySearch(env.TAVILY_API_KEY)
+  } else {
+    console.log('Using DuckDuckGo Search Engine')
+    return new DuckDuckGoSearch()
+  }
+}
+
+class DuckDuckGoSearch implements SearchEngine {
+  constructor() { }
+
+  async Search(query: string, topic: Topic): Promise<SearchResult[]> {
+    const resp = await search(query, {
+      safeSearch: SafeSearchType.STRICT
+    })
+
+    let result = await Promise.all(
+      resp.results
+        .filter((item) => item.url)
+        .map(async (item) => {
+          console.log(`Reading link [${item.title}]: ${item.url}`)
+          const html = await fetchWebPage(item.url)
+          if (!html) {
+            return { title: "", link: "", content: "" }
+          }
+          const content = extractHtml(html, item.description)
+
+          console.log(`\t->[${content.title}] ${content.content.slice(0, 100)}`)
+
+          return {
+            link: item.url,
+            title: content.title,
+            content: content.content || item.description,
+          }
+        })
+    )
+    return result.filter((item) => item.title)
+  }
+}
+
+class TavilySearch implements SearchEngine {
+  protected client: TavilyClient
+
+  constructor(apiKey: string) {
+    this.client = tavily({ apiKey: apiKey })
+  }
+
+  async Search(query: string, topic: Topic): Promise<SearchResult[]> {
+    const resp = await this.client.search(query, {
+      topic: topic
+    })
+    return resp.results.map((result) => ({
+      title: result.title,
+      link: result.url,
+      content: result.content
+    }))
+  }
+}
+
+type SearchResult = {
+  title: string
+  link: string
+  content: string
+}
+
+class GoogleSearch implements SearchEngine {
+  protected apiKey: string
+  protected cseId: string
+
+
+  constructor(apiKey: string, cseId: string) {
+    this.apiKey = apiKey
+    this.cseId = cseId
+  }
+
+  async Search(query: string, topic: Topic): Promise<SearchResult[]> {
+    const resp = await this.googleSearch(query);
 
     let result = await Promise.all(
       resp
@@ -34,37 +136,58 @@ export async function handler(args: Argument) {
         .map(async (item) => {
           console.log(`Reading link [${item.title}]: ${item.link}`)
           const html = await fetchWebPage(item.link as string)
-          const content = extractHtml(html, item.snippet as string)
+          if (!html) {
+            return { title: "", link: "", content: "" }
+          }
+          const content = extractHtml(html, item.content as string)
 
           console.log(`\t->[${content.title}] ${content.content.slice(0, 100)}`)
 
           return {
             link: item.link,
             title: content.title,
-            content: content.content || item.snippet,
+            content: content.content || item.content,
           }
         })
     )
-    result = result.filter((item) => item.title)
-    console.log("fetch result", result.length)
-    return JSON.stringify(result)
+    return result.filter((item) => item.title)
+  }
 
-  } catch (err) {
-    console.error(err)
-    return { error: err }
+  private async googleSearch(query: string) {
+    const url = `https://www.googleapis.com/customsearch/v1?key=${this.apiKey}&num=6&cx=${this.cseId}&q=${encodeURIComponent(query)}`
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(
+        `Got ${res.status} error from Google custom search: ${res.statusText}`
+      );
+    }
+
+    const json = await res.json();
+
+    const results: SearchResult[] = json?.items?.map(
+      (item: { title: string; link: string; snippet: string; }) => ({
+        title: item.title,
+        link: item.link,
+        content: item.snippet,
+      })
+    ) ?? [];
+
+    return results;
   }
 }
 
 async function fetchWebPage(url: string) {
-  const res = await fetch(url, {
-
-  });
-  if (!res.ok) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      return ""
+    }
+    const text = await res.text()
+    return text
+  } catch (error) {
     return ""
   }
-  const text = await res.text()
-
-  return text
 }
 
 function extractHtml(html: string, defaultContent: string) {
@@ -102,35 +225,6 @@ function extractHtml(html: string, defaultContent: string) {
     title: title,
     content: text.slice(0, 2400), // limit to first 2400 characters
   };
-}
-
-async function googleSearch(input: string) {
-  const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CSE_ID}&q=${encodeURIComponent(input)}`
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    throw new Error(
-      `Got ${res.status} error from Google custom search: ${res.statusText}`
-    );
-  }
-
-  const json = await res.json();
-
-  const results: searchResult[] = json?.items?.map(
-    (item: searchResult) => ({
-      title: item.title,
-      link: item.link,
-      snippet: item.snippet,
-    })
-  ) ?? [];
-
-  return results;
-}
-
-type searchResult = {
-  title?: string;
-  link?: string;
-  snippet?: string;
 }
 
 function cleanText(title: string): string {

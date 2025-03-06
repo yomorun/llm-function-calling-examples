@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tavily/core": "^0.3.1",
     "@yomo/sfn": "1.0.5",
     "cheerio": "^1.0.0",
+    "duck-duck-scrape": "^2.2.7",
     "undici": "^7.3.0"
   },
   "devDependencies": {
