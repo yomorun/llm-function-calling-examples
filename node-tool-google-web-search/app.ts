@@ -10,8 +10,6 @@ if (env.https_proxy) {
 
 export const description = `A custom search engine designed to answer questions about current events. The input is a search query, and the output is a JSON array of results.`;
 
-export const tag = 0x34;
-
 export type Argument = {
   /**
    * The search query.
@@ -34,6 +32,9 @@ export async function handler(args: Argument) {
         .map(async (item) => {
           console.log(`Reading link [${item.title}]: ${item.link}`)
           const html = await fetchWebPage(item.link as string)
+          if (!html) {
+            return { title: "", link: "", content: "" }
+          }
           const content = extractHtml(html, item.snippet as string)
 
           console.log(`\t->[${content.title}] ${content.content.slice(0, 100)}`)
@@ -56,20 +57,26 @@ export async function handler(args: Argument) {
 }
 
 async function fetchWebPage(url: string) {
-  const res = await fetch(url, {
-
-  });
-  if (!res.ok) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      return ""
+    }
+    const text = await res.text()
+    return text
+  } catch (error) {
     return ""
   }
-  const text = await res.text()
-
-  return text
 }
 
 function extractHtml(html: string, defaultContent: string) {
   const $ = cheerioLoad(html);
 
+  const charset = $('meta[charset]').attr('charset')
+  if (charset && charset !== 'utf-8') {
+    return { title: "", content: "" }
+  }
+  
   // remove unwanted elements
   $("script, style, nav, footer, header").remove();
 
