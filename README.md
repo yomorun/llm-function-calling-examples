@@ -16,7 +16,9 @@ YoMo support multiple LLM providers, like Ollama, Mistral, Llama, Azure OpenAI, 
 - [node-tool-get-ip-and-latency](./node-tool-get-ip-and-latency): Get IP and Latency by give website name like "Nike" and "Amazone" by `ping` command.
 - [node-tool-send-mail-smtp](./node-tool-send-mail-smtp): Send email by `nodemailer` and `maildev`.
 - [node-tool-send-mail-resend](./node-tool-send-mail-resend): Send email by `resend`.
-- [node-tool-web-search](./node-tool-web-search): Search the web by Google Custom Search Engine.
+- [node-tool-google-web-search](./node-tool-google-web-search): Search the web by Google Custom Search Engine.
+- [node-tool-tavily-web-search](./node-tool-tavily-web-search): Search the web by [Tavily](https://tavily.com/) Search Engine.
+- [node-tool-duckduckgo-web-search](./node-tool-duckduckgo-web-search): Search the web by [DuckDuckGo](https://github.com/Snazzah/duck-duck-scrape) Search Engine.
 
 ### Golang
 
