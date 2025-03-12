@@ -17,6 +17,7 @@ export type Argument = {
   input: string;
 };
 
+const GOOGLE_SEARCH_BASE_URL = env.GOOGLE_SEARCH_BASE_URL || "https://www.googleapis.com/customsearch/v1";
 const GOOGLE_API_KEY = env.GOOGLE_API_KEY
 const GOOGLE_CSE_ID = env.GOOGLE_CSE_ID
 console.log(`GOOGLE_API_KEY=${GOOGLE_API_KEY}, GOOGLE_CSE_ID=${GOOGLE_CSE_ID}`)
@@ -73,7 +74,7 @@ function extractHtml(html: string, defaultContent: string) {
   const $ = cheerioLoad(html);
 
   const charset = $('meta[charset]').attr('charset')
-  if (charset && charset !== 'utf-8') {
+  if (charset && charset.toLowerCase() !== 'utf-8') {
     return { title: "", content: "" }
   }
   
@@ -112,8 +113,15 @@ function extractHtml(html: string, defaultContent: string) {
 }
 
 async function googleSearch(input: string) {
-  const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CSE_ID}&q=${encodeURIComponent(input)}`
-  const res = await fetch(url);
+  const url = new URL(GOOGLE_SEARCH_BASE_URL);
+  if (GOOGLE_API_KEY && GOOGLE_CSE_ID) {
+    url.searchParams.set("key", GOOGLE_API_KEY);
+    url.searchParams.set("cx", GOOGLE_CSE_ID);
+    url.searchParams.set("q", input);
+  } else {
+    throw new Error("Missing GOOGLE_API_KEY or GOOGLE_CSE_ID")
+  }
+  const res = await fetch(url.toString());
 
   if (!res.ok) {
     throw new Error(
