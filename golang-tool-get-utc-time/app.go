@@ -33,10 +33,3 @@ func Handler(ctx serverless.Context) {
 	// return to llm automatically by yomo
 	ctx.WriteLLMResult(now)
 }
-
-// DataTags specifies the data tags to which this serverless function
-// subscribes, essential for data reception. Upon receiving data with these
-// tags, the Handler function is triggered.
-func DataTags() []uint32 {
-	return []uint32{0x60}
-}

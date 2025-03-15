@@ -76,10 +76,3 @@ func requestOpenWeatherMapAPI(lat, lon float64) string {
 
 	return string(body)
 }
-
-// DataTags specifies the data tags to which this serverless function
-// subscribes, essential for data reception. Upon receiving data with these
-// tags, the Handler function is triggered.
-func DataTags() []uint32 {
-	return []uint32{0x62}
-}

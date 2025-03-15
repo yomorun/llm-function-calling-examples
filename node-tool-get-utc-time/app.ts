@@ -6,11 +6,6 @@
 // documentation at: https://platform.openai.com/docs/guides/function-calling
 export const description = `Get current date and time in realtime, returned as UTC time string`
 
-// Tag specifies the data tag that this serverless function
-// subscribes to, which is essential for data reception. When data with this
-// tag is received, the Handler function will be triggered.
-export const tag = 0x34
-
 export type Argument = {}
 
 /**

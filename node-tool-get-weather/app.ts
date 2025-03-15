@@ -11,11 +11,6 @@ export const description = `Get current weather for a given city. If no city is 
 	convert the city name to Latitude and Longitude geo coordinates, keeping 
 	Latitude and Longitude in decimal format.`
 
-// Tag specifies the data tag that this serverless function
-// subscribes to, which is essential for data reception. When data with this
-// tag is received, the Handler function will be triggered.
-export const tag = 0x33
-
 // Argument defines the arguments for the LLM Function Calling. These
 // arguments are combined to form a prompt automatically.
 export type Argument = {

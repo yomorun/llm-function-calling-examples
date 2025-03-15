@@ -94,10 +94,3 @@ func ConvertTimezone(timeString, sourceTimezone, targetTimezone string) (string,
 	// Return the target time as a string
 	return targetTime.Format(timeFormat), nil
 }
-
-// DataTags specifies the data tags to which this serverless function
-// subscribes, essential for data reception. Upon receiving data with these
-// tags, the Handler function is triggered.
-func DataTags() []uint32 {
-	return []uint32{0x63}
-}

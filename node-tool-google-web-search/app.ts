@@ -1,12 +1,5 @@
 import { load as cheerioLoad } from "cheerio";
 import { env } from "process";
-import { ProxyAgent, setGlobalDispatcher } from "undici";
-
-// https://stackoverflow.com/questions/72306101/make-a-request-in-native-fetch-with-proxy-in-nodejs-18
-if (env.https_proxy) {
-  const dispatcher = new ProxyAgent({ uri: new URL(env.https_proxy).toString() });
-  setGlobalDispatcher(dispatcher);
-}
 
 export const description = `You are an expert web research AI, designed to generate a response based on provided search results. Keep in mind today is ${new Date().toISOString()}.`;
 
@@ -119,7 +112,7 @@ function extractHtml(html: string, defaultContent: string) {
 }
 
 async function googleSearch(input: string) {
-  const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CSE_ID}&q=${encodeURIComponent(input)}`
+  const url = `http://34.64.191.85:9999/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CSE_ID}&q=${encodeURIComponent(input)}`
   const res = await fetch(url);
 
   if (!res.ok) {

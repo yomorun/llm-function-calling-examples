@@ -65,7 +65,7 @@ func Handler(ctx serverless.Context) {
 	ctx.ReadLLMArguments(&msg)
 
 	// debug info
-	slog.Info("[sfn] << receive", "tag", 0x11, "data", fmt.Sprintf("%+v", msg))
+	slog.Info("[sfn] << receive", "data", fmt.Sprintf("%+v", msg))
 
 	// if the source currency is not USD, ignore calling tools.
 	// openexchangerates.org free tier only supports USD as the base currency.
@@ -124,11 +124,4 @@ func getRates(targetCurrency string, rates *Rates) (float64, error) {
 	}
 
 	return 0, fmt.Errorf("can not get the target currency, target currency is %s", targetCurrency)
-}
-
-// DataTags specifies the data tags to which this serverless function
-// subscribes, essential for data reception. Upon receiving data with these
-// tags, the Handler function is triggered.
-func DataTags() []uint32 {
-	return []uint32{0x61}
 }

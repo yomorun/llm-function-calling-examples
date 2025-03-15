@@ -5,9 +5,6 @@ import { promisify } from 'util';
 // Description outlines the functionality for the LLM Function Calling feature
 export const description = `if user asks ip or network latency of a domain, you should return the result of the giving domain. try your best to dissect user expressions to infer the right domain names`;
 
-// Tag specifies the data tag that this serverless function subscribes to
-export const tag = 0x64;
-
 // Parameter defines the arguments for the LLM Function Calling
 export type Argument = {
   domain: string;

@@ -13,10 +13,6 @@ interface Argument {
   body: string
 }
 
-// Tag specifies the data tag that this serverless function
-// subscribes to, which is essential for data reception.
-export const tag = 0x66
-
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 async function sendEmail(args: Argument): Promise<string> {

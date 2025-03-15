@@ -8,11 +8,6 @@ import 'dotenv/config'
 // documentation at: https://platform.openai.com/docs/guides/function-calling
 export const description = `if user asks currency exchange rate related questions, you should call this function. But if the source currency is other than USD (US Dollar), you should ignore calling tools.`
 
-// Tag specifies the data tag that this serverless function
-// subscribes to, which is essential for data reception. When data with this
-// tag is received, the Handler function will be triggered.
-export const tag = 0x33
-
 // Argument defines the arguments for the LLM Function Calling. These
 // arguments are combined to form a prompt automatically.
 export type Argument = {

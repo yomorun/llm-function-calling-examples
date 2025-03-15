@@ -57,10 +57,3 @@ func Handler(ctx serverless.Context) {
 
 	ctx.WriteLLMResult(fmt.Sprintf("Email has been successfully sent to %s", msg.To))
 }
-
-// DataTags specifies the data tags to which this serverless function
-// subscribes, essential for data reception. Upon receiving data with these
-// tags, the Handler function is triggered.
-func DataTags() []uint32 {
-	return []uint32{0x65}
-}

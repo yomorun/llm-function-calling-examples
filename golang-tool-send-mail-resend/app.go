@@ -85,8 +85,3 @@ func sendEmail(args Parameter) (string, error) {
 
 	return fmt.Sprintf("Email has been successfully sent to %s with ID: %s", args.To, resp.Id), nil
 }
-
-// DataTags specifies the data tags to which this serverless function subscribes
-func DataTags() []uint32 {
-	return []uint32{0x67}
-}
