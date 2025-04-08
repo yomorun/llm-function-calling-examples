@@ -4,19 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "bun test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
-    "@yomo/sfn": "^1.0.7"
+    "@yomo/sfn": "^1.0.7",
+    "node-fetch": "^3.3.2",
+    "socks-proxy-agent": "^8.0.5"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^22.14.0",
-    "ts-node": "^10.9.2",
-    "@types/bun": "latest"
+    "ts-node": "^10.9.2"
   },
   "private": true,
   "peerDependencies": {
