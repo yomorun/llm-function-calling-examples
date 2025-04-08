@@ -11,13 +11,15 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.4.1",
     "@yomo/sfn": "^1.0.7"
   },
   "devDependencies": {
-    "@ava/typescript": "^5.0.0",
     "@types/node": "^22.14.0",
-    "ava": "^6.2.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "@types/bun": "latest"
+  },
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
