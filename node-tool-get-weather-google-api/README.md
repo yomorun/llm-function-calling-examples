@@ -1,5 +1,11 @@
 # node-tool-get-weather-google-api
 
+This is a Serverless LLM Function Calling example using Yomo and Google Cloud API to get weather information.
+
+First, you need to create Google Cloud API key and enable the new Weather API and Geocoding API.
+
+When LLM calls the function, it will calculate the latitude and langitude of the address using Geocoding API, and then call the Weather API to get realtime weather information.
+
 ## Unit test
 
 ```bash
