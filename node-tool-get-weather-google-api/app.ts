@@ -82,7 +82,7 @@ type WeatherResponse = {
 
 // get the lat and lng of the address by google geocoding api
 export async function getGeocode(address: string) {
-  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_CLOUD_API_KEY}`, fetchOptions()).then(async response => {
+  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_CLOUD_API_KEY}`, fetchOptions()).then(async response => {
       if (!response.ok) {
         throw new Error(`Geocode API error: ${response.status} ${response.statusText}`);
       }
