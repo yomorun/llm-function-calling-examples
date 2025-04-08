@@ -1,4 +1,3 @@
-import { Client as GoogleMapsService } from "@googlemaps/google-maps-services-js";
 
 // check if the environment variable is set
 if (!process.env.GOOGLE_CLOUD_API_KEY) {
@@ -7,7 +6,8 @@ if (!process.env.GOOGLE_CLOUD_API_KEY) {
 
 const GOOGLE_CLOUD_API_KEY = process.env.GOOGLE_CLOUD_API_KEY;
 
-const googleMapsClient = new GoogleMapsService({});
+// Remove unused variable
+// const googleMapsClient = new GoogleMapsService({});
 
 export const description = 'Get the current weather information for `address`'
 
@@ -19,39 +19,54 @@ export type Argument = {
   address: string;
 }
 
-async function getWeather(address: string) {
+async function getGeocode(address: string) {
   // get the lat and lng of the address by google geocoding api
-  try {
-    const geocode = await googleMapsClient.geocode({
-      params: {
-        address: address,
-        key: GOOGLE_CLOUD_API_KEY,
+  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_CLOUD_API_KEY}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      timeout: 1000 // milliseconds
-    })
-    console.log(`[addr=${address}] geocode result: ${JSON.stringify(geocode.data.results)}`)
-    if (geocode.data.results.length === 0) {
-      return {
-        ok: false,
-        result: `address [${address}] not found`,
+      signal: AbortSignal.timeout(5000), // 5000ms timeout
+    }).then(async response => {
+      if (!response.ok) {
+        throw new Error(`Geocode API error: ${response.status} ${response.statusText}`);
       }
-    }
-    // get the weather info by google weather api
-    const lat = geocode.data.results[0].geometry.location.lat
-    const lng = geocode.data.results[0].geometry.location.lng
-
-  } catch (error) {
-    console.error(`Error getting geocode for address [${address}] :`, error);
-    return {
-      ok: false,
-      result: "can not get weather info for giving address now, please try again later",
-    }
-  }
+      
+      const geocode = await response.json();
+      
+      if (geocode.results.length === 0) {
+        throw new Error(`No results found for address [${address}]`);
+      }
+      
+      return {
+        ok: true,
+        lat: geocode.results[0].geometry.location.lat,
+        lng: geocode.results[0].geometry.location.lng,
+      };
+    }).catch(error => {
+      console.error(`Error fetching geocode data for address [${address}]:`, error);
+      throw error;
+    });
 }
 
 export async function handler(args: Argument) {
-  const result = await getWeather(args.address)
-  return result
+  try {
+    console.log(`> Getting weather info for address [${args.address}]`);
+    const geo = await getGeocode(args.address);
+    console.log(`> [address=${args.address}] Geocode data:`, geo);
+    const weather = await getWeatherByGoogleAPI(geo.lat, geo.lng);
+    console.log(`> [address=${args.address}] Weather data:`, weather);
+    return {
+      ok: true,
+      result: weather,
+    };
+  } catch(error){
+    console.error(`Error getting geocode for address [${args.address}] :`, error);
+    return {
+      ok: false,
+      result: "can not get weather info for giving address now, please try again later",
+    };
+  }
 }
 
 export async function getWeatherByGoogleAPI(lat: number, lng: number) {
@@ -77,13 +92,17 @@ export async function getWeatherByGoogleAPI(lat: number, lng: number) {
     });
 }
 
-// execute getWeatherByGoogleAPI function
-getWeatherByGoogleAPI(37.7749, -122.4194)
-  .then(data => {
-    console.log('Weather data:', data);
-  }
-  )
-  .catch(error => {
-    console.error('Error:', error);
-  }
-);
+// getGeocode('beijing')
+//   .then(data => {
+//     console.log('Geocode data:', data);
+//     getWeatherByGoogleAPI(data.lat, data.lng)
+//     .then(data => {
+//       console.log('Weather data:', data);
+//     })
+//     .catch(error => {
+//       console.error('Error:', error);
+//     });
+//   })
+//   .catch(error => {
+//     console.error('Error:', error);
+//   });
