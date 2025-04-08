@@ -31,7 +31,7 @@ export async function handler(args: Argument) {
     console.error(`Error getting geocode for address [${args.address}] :`, error);
     return {
       ok: false,
-      result: "can not get weather info for giving address now, please try again later",
+      result: "can not get weather info for given address now, please try again later",
     };
   }
 }
