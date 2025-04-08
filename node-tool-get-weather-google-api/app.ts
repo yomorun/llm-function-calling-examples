@@ -18,11 +18,11 @@ export type Argument = {
 
 export async function handler(args: Argument) {
   try {
-    console.log(`> Getting weather info for address [${args.address}]`);
+    console.log(`>Getting weather info for address [${args.address}]`);
     const geo = await getGeocode(args.address);
-    console.log(`> [address=${args.address}] Geocode data:`, geo);
+    console.log(`  [address=${args.address}] Geocode data:`, geo);
     const weather = await getWeather(geo.lat, geo.lng);
-    console.log(`> [address=${args.address}] Weather data:`, weather);
+    console.log(`  [address=${args.address}] Weather data:`, weather);
     return {
       ok: true,
       result: weather,
@@ -86,18 +86,3 @@ export async function getWeather(lat: number, lng: number) {
       throw error;
     });
 }
-
-// getGeocode('beijing')
-//   .then(data => {
-//     console.log('Geocode data:', data);
-//     getWeatherByGoogleAPI(data.lat, data.lng)
-//     .then(data => {
-//       console.log('Weather data:', data);
-//     })
-//     .catch(error => {
-//       console.error('Error:', error);
-//     });
-//   })
-//   .catch(error => {
-//     console.error('Error:', error);
-//   });
