@@ -73,7 +73,7 @@ export async function getWeather(lat: number, lng: number) {
     headers: {
       'Content-Type': 'application/json',
     },
-    signal: AbortSignal.timeout(5000), // 1000ms timeout
+    signal: AbortSignal.timeout(5000), // 5000ms timeout
   })
     .then(response => {
       if (!response.ok) {
