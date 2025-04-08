@@ -4,8 +4,7 @@ This is a Serverless LLM Function Calling example using Yomo and Google Cloud AP
 
 First, you need to create Google Cloud API key and enable the new Weather API and Geocoding API.
 
-When LLM calls the function, it will calculate the latitude and langitude of the address using Geocoding API, and then call the Weather API to get realtime weather information.
-
+When LLM calls the function, it will calculate the latitude and longitude of the address using Geocoding API, and then call the Weather API to get realtime weather information.
 ## Unit test
 
 ```bash
