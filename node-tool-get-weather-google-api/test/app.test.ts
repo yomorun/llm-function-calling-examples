@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { getGeocode, getWeather } from "./app";
+import { getGeocode, getWeather } from "../src/app";
 
 test('getGeocode', async () => {
 	const address = '1600 Amphitheatre Parkway, Mountain View, CA';
