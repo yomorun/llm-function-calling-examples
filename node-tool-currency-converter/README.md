@@ -5,10 +5,10 @@ This is a serverless function for converting currency from USD to other currenci
 You can grab your api-key from [Exchange Rate API](https://www.exchangerate-api.com/) for free, then, add it to your `.env` file:
 
 ```sh
-YOMO_SFN_NAME=my_first_llm_function_tool
+YOMO_SFN_NAME=currency-converter
 YOMO_SFN_ZIPPER=zipper.vivgrid.com:9000
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
-OPENEXCHANGERATES_API_KEY=<your-openexchangerates.org-api-key>
+OPENEXCHANGERATES_API_KEY=<your-exchangerate-api.com-api-key>
 ```
 
 Other environment variables can be found in the [vivgrid console](https://console.vivgrid.com/) serverless page
@@ -26,7 +26,7 @@ Detail usages of the cli can be found on [Doc: YoMo CLI](https://yomo.run/docs/c
 ### 2. Attach this function calling to your LLM Bridge
 
 ```bash
-yomo run app.ts -n llm-tool-currency-converter
+yomo run -n llm-tool-currency-converter
 ```
 
 ### 3. Trigger the function calling
@@ -38,17 +38,16 @@ curl https://api.vivgrid.com/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{
-    "model": "gpt-4o",
     "messages": [
       {
         "role": "user",
-        "content": "I have $10. Can I afford sunglasses that cost 1,499 yen?"
+        "content": "I want to buy a book that costs JPY 1,000. I have $8. Can I afford it?"
       }
     ]
   }'
 ```
 
-Based on the real time weather ifo, you may get response like:
+Based on the real time exchange rate , you may get response like:
 
 ```json
 {
@@ -61,35 +60,9 @@ Based on the real time weather ifo, you may get response like:
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "With $10, you have approximately 1,510.25 yen (using an exchange rate of about 151.02 JPY per USD). Since the sunglasses cost 1,499 yen, you can afford them."
+        "content": "As of the current exchange rate, $8 is approximately JPY 1,138.60 (using the rate of 1 USD = 142.3246 JPY). Therefore, you can afford the book that costs JPY 1,000."
       },
       "finish_reason": "stop",
-      "content_filter_results": {
-        "hate": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "self_harm": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "sexual": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "violence": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "jailbreak": {
-          "filtered": false,
-          "detected": false
-        },
-        "profanity": {
-          "filtered": false,
-          "detected": false
-        }
-      }
     }
   ],
   "usage": {
@@ -100,36 +73,6 @@ Based on the real time weather ifo, you may get response like:
     "completion_tokens_details": null
   },
   "system_fingerprint": "fp_04751d0b65",
-  "prompt_filter_results": [
-    {
-      "index": 0,
-      "content_filter_results": {
-        "hate": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "self_harm": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "sexual": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "violence": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "jailbreak": {
-          "filtered": false,
-          "detected": false
-        },
-        "profanity": {
-          "filtered": false,
-          "detected": false
-        }
-      }
-    }
-  ]
+  "prompt_filter_results": []
 }
 ```
