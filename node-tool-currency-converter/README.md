@@ -29,7 +29,7 @@ Detail usages of the cli can be found on [Doc: YoMo CLI](https://yomo.run/docs/c
 yomo run -n llm-tool-currency-converter
 ```
 
-### 3. Trigger the function calling
+### 3. Invoke LLM
 
 Test in your terminal:
 
@@ -75,4 +75,10 @@ Based on the real time exchange rate , you may get response like:
   "system_fingerprint": "fp_04751d0b65",
   "prompt_filter_results": []
 }
+```
+
+## Deploy to Vivgrid
+
+```bash
+yc deploy . --env OPENEXCHANGERATES_API_KEY=<your-exchangerate-api.com-api-key>
 ```
