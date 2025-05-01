@@ -6,7 +6,7 @@ import 'dotenv/config'
 // return value make the function discoverable and callable within the LLM
 // ecosystem. For more information on Function Calling, refer to the OpenAI
 // documentation at: https://platform.openai.com/docs/guides/function-calling
-export const description = `if user asks currency exchange rate related questions, you should call this function. Keep mind that the SourceCurrency should be always USD.`
+export const description = `if user asks currency exchange rate related questions, you should call this function. Keep in mind that the SourceCurrency should be always USD.`
 
 // Argument defines the arguments for the LLM Function Calling. These
 // arguments are combined to form a prompt automatically.
