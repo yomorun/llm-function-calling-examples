@@ -47,7 +47,7 @@ curl https://api.vivgrid.com/v1/chat/completions \
   }'
 ```
 
-Based on the real time exchange rate , you may get response like:
+Based on the real time exchange rate, you may get response like:
 
 ```json
 {
