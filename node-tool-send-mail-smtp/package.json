@@ -14,7 +14,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@yomo/sfn": "^1.0.5",
+    "@yomo/sfn": "^1.0.7",
     "dotenv": "^16.4.7",
     "nodemailer": "^6.9.12"
   }
