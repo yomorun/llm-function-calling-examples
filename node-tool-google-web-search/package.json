@@ -1,0 +1,19 @@
+{
+  "name": "tool-node-google-web-search",
+  "version": "1.0.0",
+  "description": "LLM Function Calling - Google Web Search",
+  "main": ".wrapper.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@yomo/sfn": "^1.0.7",
+    "cheerio": "^1.0.0"
+  }
+}

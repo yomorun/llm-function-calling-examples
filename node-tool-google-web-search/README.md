@@ -5,7 +5,7 @@ This is a serverless function for web searching.
 You can obtain your `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` by following this [article](https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search), then, add them to your `.env` file:
 
 ```sh
-YOMO_SFN_NAME=web-search
+YOMO_SFN_NAME=google-web-search
 YOMO_SFN_ZIPPER="zipper.vivgrid.com:9000"
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
 GOOGLE_API_KEY=
@@ -65,32 +65,7 @@ You may get response like:
         "content": "On January 13, 2025, the stock market experienced mixed performances. The Dow Jones Industrial Average rose by 0.9%, while the S\u0026P 500 rebounded from earlier losses to close up 0.2%. However, the Nasdaq Composite fell 0.4%. The tech sector, particularly chip stocks, weighed down on the markets. Concerns were prevalent about the Federal Reserve's next move on interest rates, especially after a strong jobs report earlier raised doubts about potential rate cuts. The market dynamics were also influenced by pending economic data on inflation and the Consumer Price Index scheduled for that week."
       },
       "finish_reason": "stop",
-      "content_filter_results": {
-        "hate": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "self_harm": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "sexual": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "violence": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "jailbreak": {
-          "filtered": false,
-          "detected": false
-        },
-        "profanity": {
-          "filtered": false,
-          "detected": false
-        }
-      }
+      "content_filter_results": {}
     }
   ],
   "usage": {
@@ -107,36 +82,6 @@ You may get response like:
     }
   },
   "system_fingerprint": "fp_f3927aa00d",
-  "prompt_filter_results": [
-    {
-      "index": 0,
-      "content_filter_results": {
-        "hate": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "self_harm": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "sexual": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "violence": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "jailbreak": {
-          "filtered": false,
-          "detected": false
-        },
-        "profanity": {
-          "filtered": false,
-          "detected": false
-        }
-      }
-    }
-  ]
+  "prompt_filter_results": []
 }
 ```
