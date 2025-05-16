@@ -62,7 +62,7 @@ curl --request POST \
 ### 4. Connect this Function to Your LLM Bridge
 
 ```bash
-yomo run app.ts -n my_first_llm_function_tool
+yomo run -n my_first_llm_function_tool
 ```
 
 ## Web Interface

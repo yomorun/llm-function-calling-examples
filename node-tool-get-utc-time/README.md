@@ -23,7 +23,7 @@ Detail usages of the cli can be found on [Doc: YoMo CLI](https://yomo.run/docs/c
 ### 2. Attach this function calling to your LLM Bridge
 
 ```bash
-yomo run app.ts -n llm-tool-get-utc-time
+yomo run -n llm-tool-get-utc-time
 ```
 
 ### 3. Trigger the function calling

@@ -43,7 +43,7 @@ Detailed CLI usage instructions can be found in the [YoMo CLI documentation](htt
 ### 2. Run the function
 
 ```bash
-yomo run app.ts -n postgres-db-tool
+yomo run -n postgres-db-tool
 ```
 
 ## Function Call Examples

@@ -26,7 +26,7 @@ Detail usages of the cli can be found on [Doc: YoMo CLI](https://yomo.run/docs/c
 ### 2. Attach this function calling to your LLM Bridge
 
 ```bash
-yomo run app.ts -n llm-tool-get-weather
+yomo run -n tool-get-weather
 ```
 
 ### 3. Trigger the function calling
@@ -64,32 +64,7 @@ Based on the real time weather ifo, you may get response like:
         "content": "Currently, it is not raining in either Paris or Sydney. \n\n- In **Paris**, the weather is characterized by broken clouds with a temperature of 6.1°C.\n- In **Sydney**, the weather also features broken clouds with a temperature of 20.82°C."
       },
       "finish_reason": "stop",
-      "content_filter_results": {
-        "hate": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "self_harm": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "sexual": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "violence": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "jailbreak": {
-          "filtered": false,
-          "detected": false
-        },
-        "profanity": {
-          "filtered": false,
-          "detected": false
-        }
-      }
+      "content_filter_results": {}
     }
   ],
   "usage": {
@@ -100,36 +75,6 @@ Based on the real time weather ifo, you may get response like:
     "completion_tokens_details": null
   },
   "system_fingerprint": "fp_04751d0b65",
-  "prompt_filter_results": [
-    {
-      "index": 0,
-      "content_filter_results": {
-        "hate": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "self_harm": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "sexual": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "violence": {
-          "filtered": false,
-          "severity": "safe"
-        },
-        "jailbreak": {
-          "filtered": false,
-          "detected": false
-        },
-        "profanity": {
-          "filtered": false,
-          "detected": false
-        }
-      }
-    }
-  ]
+  "prompt_filter_results": []
 }
 ```

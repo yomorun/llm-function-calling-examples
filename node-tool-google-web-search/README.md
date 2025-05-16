@@ -27,7 +27,7 @@ Detail usages of the cli can be found on [Doc: YoMo CLI](https://yomo.run/docs/c
 ### 2. Attach this function calling to your LLM Bridge
 
 ```bash
-yomo run app.ts -n llm-tool-web-search
+yomo run -n llm-tool-web-search
 ```
 
 ### 3. Trigger the function calling

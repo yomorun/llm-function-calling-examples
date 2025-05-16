@@ -37,7 +37,7 @@ bun test
 ## Run on local
 
 ```bash
-GOOGLE_CLOUD_API_KEY=<api_key> yomo run app.ts
+GOOGLE_CLOUD_API_KEY=<api_key> yomo run
 ```
 ## Deploy to Vivgrid
 
