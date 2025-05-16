@@ -6,7 +6,7 @@ The function uses the [DuckDuckGo](https://github.com/Snazzah/duck-duck-scrape) 
 
 ```sh
 YOMO_SFN_NAME=web-search
-YOMO_SFN_ZIPPER="zipper.vivgrid.com:9000"
+YOMO_SFN_ZIPPER=zipper.vivgrid.com:9000
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
 ```
 

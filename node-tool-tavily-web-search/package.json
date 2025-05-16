@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@tavily/core": "^0.3.1",
-    "@yomo/sfn": "1.0.5",
+    "@yomo/sfn": "1.0.7",
     "cheerio": "^1.0.0"
   },
   "devDependencies": {

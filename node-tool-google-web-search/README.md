@@ -6,7 +6,7 @@ You can obtain your `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` by following this [arti
 
 ```sh
 YOMO_SFN_NAME=google-web-search
-YOMO_SFN_ZIPPER="zipper.vivgrid.com:9000"
+YOMO_SFN_ZIPPER=zipper.vivgrid.com:9000
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
 GOOGLE_API_KEY=
 GOOGLE_CSE_ID=

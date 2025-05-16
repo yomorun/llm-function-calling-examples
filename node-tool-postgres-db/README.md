@@ -17,7 +17,7 @@ Before running this tool, create a `.env` file and set the following environment
 
 ```
 YOMO_SFN_NAME=postgres-db-tool
-YOMO_SFN_ZIPPER="zipper.vivgrid.com:9000"
+YOMO_SFN_ZIPPER=zipper.vivgrid.com:9000
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
 
 # PostgreSQL database connection URL
