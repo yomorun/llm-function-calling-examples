@@ -1,5 +1,8 @@
 import * as dns from 'dns';
 import * as ping from 'ping';
+import * as fs from "fs";
+import * as path from "path";
+
 import { promisify } from 'util';
 
 // Description outlines the functionality for the LLM Function Calling feature
@@ -10,12 +13,19 @@ export type Argument = {
   domain: string;
 };
 
-const lookup = promisify(dns.lookup);
-
 async function getDomainInfo(domain: string): Promise<string> {
   try {
-    // Get IP address
-    const { address: ip } = await lookup(domain);
+
+    // Create a new Resolver instance
+    const resolver = new dns.Resolver();
+    
+    // Set the DNS servers for this specific resolver instance
+    resolver.setServers([dns_server]); // You can provide multiple servers
+    
+    const addresses = await promisify(resolver.resolve4.bind(resolver))(domain);
+    console.log(`IP Addresses (dns server: ${dns_server}): ${addresses}`);
+
+    var ip = addresses[0]
 
     // Get latency using ping
     const pingResult = await ping.promise.probe(ip, {
@@ -49,4 +59,14 @@ export async function handler(args: Argument): Promise<string> {
   const result = await getDomainInfo(args.domain);
   console.log('[sfn] result:', result);
   return result;
+}
+
+// read `../assets/dns_server.json` file
+var dns_server = "1.1.1.1"
+const filePath = path.join(__dirname, "../assets/dns_server.config");
+try {
+  dns_server = fs.readFileSync(filePath, "utf-8");
+  console.log("Read DNS Server config from config:", dns_server);
+} catch (error) {
+  console.error("Error reading the config:", error);
 }
