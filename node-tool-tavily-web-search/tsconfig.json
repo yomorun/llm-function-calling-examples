@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "esNext",
+    "target": "esnext",
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "outDir": "dist",
-    "skipLibCheck": true
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "rootDir": "./src"
   },
-  "include": ["src/**/*", ".wrapper.ts"],
+  "include": ["src/**/*", "src/.wrapper.ts"],
   "exclude": ["node_modules"]
 }
