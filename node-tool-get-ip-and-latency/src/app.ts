@@ -62,7 +62,7 @@ export async function handler(args: Argument): Promise<string> {
 }
 
 // read `../assets/dns_server.json` file
-var dns_server = "1.1.1.1"
+let dns_server = "1.1.1.1"
 const filePath = path.join(__dirname, "../assets/dns_server.config");
 try {
   dns_server = fs.readFileSync(filePath, "utf-8");
