@@ -11,7 +11,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
-    "@yomo/sfn": "^1.0.7",
+    "@yomo/sfn": "^1.1.0",
     "node-fetch": "^2.7.0",
     "socks-proxy-agent": "^8.0.5"
   },
