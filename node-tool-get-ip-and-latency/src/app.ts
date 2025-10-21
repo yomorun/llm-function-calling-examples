@@ -1,8 +1,7 @@
 import * as dns from 'dns';
-import * as ping from 'ping';
+import * as net from 'net';
 import * as fs from "fs";
 import * as path from "path";
-
 import { promisify } from 'util';
 
 // Description outlines the functionality for the LLM Function Calling feature
@@ -13,34 +12,98 @@ export type Argument = {
   domain: string;
 };
 
-async function getDomainInfo(domain: string): Promise<string> {
-  try {
+/**
+ * Measure TCP connection latency (works in Lambda)
+ */
+async function measureTcpLatency(ip: string, port: number = 443): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
+    const socket = net.createConnection({ host: ip, port });
+    
+    socket.on('connect', () => {
+      const latency = Date.now() - startTime;
+      socket.destroy();
+      resolve(latency);
+    });
+    
+    socket.on('error', (error) => {
+      socket.destroy();
+      reject(error);
+    });
+    
+    socket.on('timeout', () => {
+      socket.destroy();
+      reject(new Error('Connection timeout'));
+    });
+  });
+}
 
+/**
+ * Measure TCP latency with a hard timeout limit
+ */
+async function measureTcpLatencyWithTimeout(ip: string, port: number = 443, timeoutMs: number = 3000): Promise<number> {
+  const timeoutPromise = new Promise<number>((_, reject) => {
+    setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms`)), timeoutMs);
+  });
+  
+  return Promise.race([
+    measureTcpLatency(ip, port),
+    timeoutPromise
+  ]);
+}
+
+async function getDomainInfo(domain: string): Promise<string> {
+  let dns_server = "1.1.1.1"; // Default DNS server
+  // Also check environment variable as fallback
+  if (process.env.DNS_SERVER) {
+    dns_server = process.env.DNS_SERVER;
+  }
+  console.log(`[${domain}] DNS Server: ${dns_server}`);
+
+  try {
     // Create a new Resolver instance
     const resolver = new dns.Resolver();
     
     // Set the DNS servers for this specific resolver instance
-    resolver.setServers([dns_server]); // You can provide multiple servers
+    resolver.setServers([dns_server]);
     
     const addresses = await promisify(resolver.resolve4.bind(resolver))(domain);
-    console.log(`IP Addresses (dns server: ${dns_server}): ${addresses}`);
+    console.log(`[${domain}] IP@${dns_server}: ${addresses}`);
 
-    var ip = addresses[0]
+    // use the first IP address
+    const ip = addresses[0];
 
-    // Get latency using ping
-    const pingResult = await ping.promise.probe(ip, {
-      timeout: 3,
-      extra: ['-c', '3'] // Send 3 packets
-    });
+    // Measure latency using TCP connection (works in Lambda)
+    try {
+      const latencies: number[] = [];
+      
+      // Make 3 measurements to get average latency
+      try {
+        for (let i = 0; i < 3; i++) {
+          const latency = await measureTcpLatencyWithTimeout(ip, 443, 3000); // Try HTTPS port with 3s timeout
+          latencies.push(latency);
+        }
+      } catch (httpsError) {
+        // If 443 fails, try port 80
+        const errorMessage = httpsError instanceof Error ? httpsError.message : String(httpsError);
+        console.log(`[${domain}] Port 443 failed, trying port 80: ${errorMessage}`);
+        const latency = await measureTcpLatencyWithTimeout(ip, 80, 3000);
+        latencies.push(latency);
+      }
 
-    if (!pingResult.alive) {
-      return `domain ${domain} has ip ${ip}, but it does not support ICMP protocol or network is unavailable now, so I can not get the latency data`;
+      const avgLatency = latencies.reduce((a, b) => a + b, 0) / latencies.length;
+      
+      return `domain ${domain} has ip ${ip} with average latency ${avgLatency.toFixed(2)}ms. latency was tested for 3 times, use DNS server ${dns_server}, make sure you answer this with the IP address, dns server and Latency`;
+      
+    } catch (latencyError) {
+      const errorMessage = latencyError instanceof Error ? latencyError.message : String(latencyError);
+      console.error(`[${domain}] Latency measurement error: ${errorMessage}`);
+      return `domain ${domain} has ip ${ip}, but TCP connection failed, so I cannot get the latency data`;
     }
 
-    return `domain ${domain} has ip ${ip} with average latency ${pingResult.avg}ms, make sure answer with the IP address and Latency`;
-
   } catch (error) {
-    console.error('Error:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`[${domain}] Error: ${errorMessage}`);
     return 'can not get the domain name right now, please try again later';
   }
 }
@@ -52,21 +115,11 @@ async function getDomainInfo(domain: string): Promise<string> {
  */
 export async function handler(args: Argument): Promise<string> {
   if (!args.domain) {
-    console.warn('[sfn] domain is empty');
+    console.warn(`[${args.domain}] domain is empty`);
     return 'can not get the domain name right now, please try again later';
   }
 
   const result = await getDomainInfo(args.domain);
-  console.log('[sfn] result:', result);
+  console.log(`[${args.domain}] result: ${result}`);
   return result;
-}
-
-// read `../assets/dns_server.json` file
-let dns_server = "1.1.1.1"
-const filePath = path.join(__dirname, "../assets/dns_server.config");
-try {
-  dns_server = fs.readFileSync(filePath, "utf-8").trim();
-  console.log("Read DNS Server config from config:", dns_server);
-} catch (error) {
-  console.error("Error reading the config:", error);
 }
