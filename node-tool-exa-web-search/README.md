@@ -1,6 +1,6 @@
 # LLM Function Calling - Web Search
 
-This is a serverless function for web searching by [exa.ai][https://exa.ai].
+This is a serverless function for web searching by [exa.ai](https://exa.ai).
 
 You can obtain your `EXA_API_KEY` from Exa Dashboard, then, add it to your `.env` file:
 
