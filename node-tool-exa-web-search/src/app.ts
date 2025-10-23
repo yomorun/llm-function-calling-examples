@@ -1,4 +1,4 @@
-export const description = 'Perform a search query on the web, and retrieve the most relevent URLs/web data'
+export const description = 'Perform a search query on the web, and retrieve the most relevant URLs/web data'
 
 // For jsonschema in TypeScript, see: https://github.com/YousefED/typescript-json-schema
 export type Argument = {
