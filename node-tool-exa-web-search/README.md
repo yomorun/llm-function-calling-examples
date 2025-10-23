@@ -1,18 +1,18 @@
 # LLM Function Calling - Web Search
 
-This is a serverless function for web searching.
+This is a serverless function for web searching by [exa.ai][https://exa.ai].
 
-You can obtain your `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` by following this [article](https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search), then, add them to your `.env` file:
+You can obtain your `EXA_API_KEY` from Exa Dashboard, then, add it to your `.env` file:
 
 ```sh
-YOMO_SFN_NAME=google-web-search
+YOMO_SFN_NAME=node-tool-exa-web-search
 YOMO_SFN_ZIPPER=zipper.vivgrid.com:9000
 YOMO_SFN_CREDENTIAL=<your-yomo-sfn-credential>
-GOOGLE_API_KEY=
-GOOGLE_CSE_ID=
+
+EXA_API_KEY=<exa-api-key>
 ```
 
-Other environment variables can be found in the [vivgrid console](https://console.vivgrid.com/) serverless page
+Other environment variables can be found in the [Vivgrid Console](https://console.vivgrid.com/) serverless page
 
 ## Development
 
@@ -27,7 +27,7 @@ Detail usages of the cli can be found on [Doc: YoMo CLI](https://yomo.run/docs/c
 ### 2. Attach this function calling to your LLM Bridge
 
 ```bash
-yomo run -n llm-tool-web-search
+yomo run
 ```
 
 ### 3. Trigger the function calling
@@ -42,7 +42,7 @@ curl https://api.vivgrid.com/v1/chat/completions \
     "messages": [
       {
         "role": "user",
-        "content": "How did the stock market perform in 2025.1.13?"
+        "content": "list the top 5 latest breaking news in AI and Startups in the last 7 days "
       }
     ]
   }'
@@ -55,13 +55,13 @@ You may get response like:
   "id": "chatcmpl-B0UuxQ3FXgrDXb4Gk4S21EfglS1BT",
   "object": "chat.completion",
   "created": 1739458547,
-  "model": "gpt-4o-2024-08-06",
+  "model": "gpt-5",
   "choices": [
     {
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "On January 13, 2025, the stock market experienced mixed performances. The Dow Jones Industrial Average rose by 0.9%, while the S\u0026P 500 rebounded from earlier losses to close up 0.2%. However, the Nasdaq Composite fell 0.4%. The tech sector, particularly chip stocks, weighed down on the markets. Concerns were prevalent about the Federal Reserve's next move on interest rates, especially after a strong jobs report earlier raised doubts about potential rate cuts. The market dynamics were also influenced by pending economic data on inflation and the Consumer Price Index scheduled for that week."
+        "content": "Based on the latest breaking news from the past 7 days, here are the key developments in AI and startups:\r\n\r\n## Major Funding Rounds\r\nVivgrid.com - The leading AI inference platform raised approximately $250 million at a $4+ billion valuation, less than three months after announcing a $125 million Series B."
       },
       "finish_reason": "stop",
       "content_filter_results": {}

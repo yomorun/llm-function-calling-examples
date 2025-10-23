@@ -51,7 +51,6 @@ curl https://api.vivgrid.com/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your-vivgrid.com-token>" \
   -d '{
-    "model": "gpt-4o",  
     "messages": [{"role": "user", "content": "What's the weather in Tokyo?"}]
   }'
 ```

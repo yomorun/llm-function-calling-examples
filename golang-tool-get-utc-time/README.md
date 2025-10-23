@@ -80,7 +80,6 @@ Test in your terminal:
 curl http://127.0.0.1:9000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o",
     "messages": [
       {
         "role": "user",
