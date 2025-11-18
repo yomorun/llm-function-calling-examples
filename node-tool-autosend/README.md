@@ -8,7 +8,7 @@ Enable your AI agent to generate and send professional emails to customers using
 
 Generate and send custom HTML emails with dynamic content. In this example, we'll send a credit balance notification with a payment link.
 
-<img src="https://docs.vivgrid.com/images/p/20251118.0.png" alt="Send email via Autosend on vivgrid" />
+<img src="https://cdn.vivgrid.com/p/20251118.0.png" alt="Send email via Autosend on vivgrid" />
 
 ```markdown Send html format email wrap
 - Write a HTML-formatted email addressed to fan.wei.xiao@gmail.com, referring to the recipient as Vincent Van.
@@ -22,16 +22,16 @@ Generate and send custom HTML emails with dynamic content. In this example, we'l
 
 You can test this integration using the [Alchemist Tool](https://alchemist.vivgrid.com):
 
-<img src="https://docs.vivgrid.com/images/p/20251118.1.png" alt="Send email via Autosend on vivgrid" />
+<img src="https://cdn.vivgrid.com/p/20251118.1.png" alt="Send email via Autosend on vivgrid" />
 
 **Result:**
 
-<img src="https://docs.vivgrid.com/images/p/20251118.2.png" alt="Send email via Autosend on vivgrid" />
+<img src="https://cdn.vivgrid.com/p/20251118.2.png" alt="Send email via Autosend on vivgrid" />
 ## Template-Based Email Sending
 
 Send emails using pre-configured templates for consistent branding and messaging.
 
-<img src="https://docs.vivgrid.com/images/p/20251118.3.png" alt="Send email via Autosend on vivgrid" />
+<img src="https://cdn.vivgrid.com/p/20251118.3.png" alt="Send email via Autosend on vivgrid" />
 
 Using the OpenAI SDK:
 
