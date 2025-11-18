@@ -1,12 +1,12 @@
 {
   "name": "node-tool-autosend",
   "version": "1.0.0",
-  "description": "",
+  "description": "an AI Tool to send emails via autosend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["yomo", "ai-tool"],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.22.0",
