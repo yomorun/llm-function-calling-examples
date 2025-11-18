@@ -75,7 +75,7 @@ export async function handler(args: Argument) {
       name: args.to.name,
     },
     subject: args.subject,
-  }
+  };
 
   if (process.env.AUTOSEND_REPLY_TO_EMAIL) {
     body.replyTo = {
