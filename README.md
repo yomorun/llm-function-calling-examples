@@ -1,176 +1,171 @@
-# 🚀 YoMo LLM Function Calling Examples
+# YoMo LLM Function Calling Examples
 
-**Build powerful AI agents with the best open-source serverless function calling framework.**
+This repository contains TypeScript and Go examples for YoMo LLM function calling.
 
-This repository showcases real-world examples of LLM Function Calling using [YoMo](https://github.com/yomorun/yomo) - the fastest, most developer-friendly way to create serverless functions that your AI agents can call.
+Examples are grouped by language:
 
-## Why YoMo for AI Agent Development?
+- `ts/`: TypeScript tools
+- `go/`: Go tools
 
-### 🎯 **Built for AI Agents**
-- **Type-Safe Development**: Write functions in TypeScript or Go with full type safety
-- **LLM-Ready**: Functions automatically generate JSON schemas for seamless LLM integration
-- **Real-Time Performance**: Ultra-low latency for responsive AI interactions
+Each example exports a description, typed arguments, and a handler that YoMo can expose as an LLM callable tool.
 
-### 🔄 **Write Once, Run Anywhere**
-- **Multi-Model Support**: Works with OpenAI, Claude, Llama, Mistral, Azure OpenAI, and more
-- **Provider Flexibility**: Switch between LLM providers without changing your functions
-- **No Vendor Lock-in**: Deploy on any cloud or self-host
+## Examples
 
-### ⚡ **Developer Experience**
+### Weather and Location
+
+| Example | Language | Description |
+| --- | --- | --- |
+| [get-weather](./ts/get-weather) | TypeScript | Get current weather by city and coordinates with OpenWeatherMap. |
+| [get-weather-google-api](./ts/get-weather-google-api) | TypeScript | Get current weather for an address with Google Geocoding and Weather APIs. |
+| [get-weather](./go/get-weather) | Go | Get current weather by city and coordinates with OpenWeatherMap. |
+| [get-utc-time](./ts/get-utc-time) | TypeScript | Return the current UTC time. |
+| [get-utc-time](./go/get-utc-time) | Go | Return the current UTC time. |
+| [timezone-calculator](./go/timezone-calculator) | Go | Convert a time between IANA time zones. |
+
+### Finance and Data
+
+| Example | Language | Description |
+| --- | --- | --- |
+| [currency-converter](./ts/currency-converter) | TypeScript | Convert USD to another currency with ExchangeRate API. |
+| [currency-converter](./go/currency-converter) | Go | Convert USD to another currency with Open Exchange Rates. |
+
+### Web Search and Network
+
+| Example | Language | Description |
+| --- | --- | --- |
+| [exa-web-search](./ts/exa-web-search) | TypeScript | Search the web with Exa. |
+| [google-web-search](./ts/google-web-search) | TypeScript | Search with Google Custom Search and extract page content. |
+| [tavily-web-search](./ts/tavily-web-search) | TypeScript | Search current web content with Tavily. |
+| [duckduckgo-web-search](./ts/duckduckgo-web-search) | TypeScript | Search current web content with DuckDuckGo. |
+| [get-ip-and-latency](./ts/get-ip-and-latency) | TypeScript | Resolve a domain and measure latency. |
+| [get-ip-and-latency](./go/get-ip-and-latency) | Go | Resolve a domain and measure latency with ping. |
+
+### Communication
+
+| Example | Language | Description |
+| --- | --- | --- |
+| [autosend](./ts/autosend) | TypeScript | Send text, HTML, or template email with AutoSend. |
+| [send-mail-smtp](./ts/send-mail-smtp) | TypeScript | Send email with SMTP and nodemailer. |
+| [send-mail-resend](./ts/send-mail-resend) | TypeScript | Send email with Resend. |
+| [send-mail-smtp](./go/send-mail-smtp) | Go | Send email with SMTP. |
+| [send-mail-resend](./go/send-mail-resend) | Go | Send email with Resend. |
+
+### Database
+
+| Example | Language | Description |
+| --- | --- | --- |
+| [postgres-db](./ts/postgres-db) | TypeScript | Query and manage PostgreSQL tables. |
+
+## YoMo Usage
+
+### 1. Install YoMo CLI
+
 ```bash
-# Install YoMo CLI
 curl -fsSL https://get.yomo.run | sh
+```
 
-# Run any example
+Detailed CLI usage is available in the YoMo CLI documentation: https://yomo.run/docs/cli
+
+### 2. Configure the LLM Bridge
+
+Create a `yomo.yml` file:
+
+```yaml
+zipper:
+  host: "127.0.0.1"
+  port: 9000
+  tls: {}
+
+http_api:
+  host: "127.0.0.1"
+  port: 9001
+  enable_tool_api: false
+
+llm_providers:
+  - type: "openai-compatible"
+    model_id: "gpt-5.4-nano"
+    default: true
+    params:
+      model: "gpt-5.4-nano"
+      api_key: "<YOUR_API_KEY>"
+      base_url: "https://api.openai.com/v1"
+```
+
+### 3. Start the LLM Bridge
+
+Run this from the directory that contains `yomo.yml`:
+
+```bash
+yomo serve -c ./yomo.yml
+```
+
+### 4. Run a Function
+
+Open another terminal, enter one example directory, set any environment variables required by that example, and run it:
+
+```bash
 cd ts/get-weather
-yomo run -n get-weather
+OPENWEATHERMAP_API_KEY=<your-openweathermap-api-key> yomo run -n get-weather
 ```
 
-### 🌍 **Production Ready**
-- **Geo-Distributed**: Deploy globally for low latency worldwide
-- **Auto-Scaling**: Handle any load automatically  
-- **Self-Hosting**: Full control over your infrastructure
+For Go examples, use the same pattern:
 
-## Quick Start
-
-**Try it in 2 minutes:**
-
-1. **Clone and run an example:**
 ```bash
-git clone https://github.com/yomorun/llm-function-calling-examples.git
-cd llm-function-calling-examples/ts/get-weather
-yomo run -n get-weather
+cd go/get-weather
+OPENWEATHERMAP_API_KEY=<your-openweathermap-api-key> yomo run -n get-weather
 ```
 
-2. **Test with your LLM:**
+Each subdirectory README lists only the environment variables required by that specific example.
 
-You can grab a free account on [vivgrid.com](https://console.vivgrid.com) to build your AI Agent:
+### 5. Send a Chat Completion Request
+
+Call the local HTTP API exposed by `yomo serve`:
 
 ```bash
-curl https://api.vivgrid.com/v1/chat/completions \
+curl http://127.0.0.1:9001/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <your-vivgrid.com-token>" \
   -d '{
-    "messages": [{"role": "user", "content": "What's the weather in Tokyo?"}]
+    "messages": [
+      {
+        "role": "user",
+        "content": "Is it raining in Paris and Sydney?"
+      }
+    ]
   }'
 ```
 
-That's it! Your AI agent now has weather capabilities.
+YoMo routes the request to the LLM provider, exposes the running functions as tools, invokes the matching function, and returns the final assistant response.
 
-## 📚 Function Examples
+## Function Shape
 
-Explore real-world serverless functions organized by category:
+TypeScript examples use this shape:
 
-### 🌦️ **Weather & Location**
-| Function | Language | Description |
-|----------|----------|-------------|
-| [get-weather](./ts/get-weather) | TypeScript | Get weather by city using OpenWeatherMap API |
-| [get-weather-google-api](./ts/get-weather-google-api) | TypeScript | Get weather using Google Weather API |
-| [get-weather](./go/get-weather) | Go | Weather information with geo-coordinates |
-| [get-utc-time](./ts/get-utc-time) | TypeScript | Get UTC time by city name |
-| [get-utc-time](./go/get-utc-time) | Go | UTC time lookup |
-| [timezone-calculator](./go/timezone-calculator) | Go | Calculate timezone for specific time |
-
-### 💰 **Financial & Data**
-| Function | Language | Description |
-|----------|----------|-------------|
-| [currency-converter](./ts/currency-converter) | TypeScript | Real-time currency conversion |
-| [currency-converter](./go/currency-converter) | Go | Currency calculator with live rates |
-
-### 🔍 **Web Search & Network**
-| Function | Language | Description |
-|----------|----------|-------------|
-| [exa-web-search](./ts/exa-web-search) | TypeScript | Search using [Exa](https://exa.ai) |
-| [google-web-search](./ts/google-web-search) | TypeScript | Search using Google Custom Search |
-| [tavily-web-search](./ts/tavily-web-search) | TypeScript | Web search via [Tavily](https://tavily.com/) |
-| [duckduckgo-web-search](./ts/duckduckgo-web-search) | TypeScript | Privacy-focused DuckDuckGo search |
-| [get-ip-and-latency](./ts/get-ip-and-latency) | TypeScript | Get IP and latency for websites |
-| [get-ip-and-latency](./go/get-ip-and-latency) | Go | Network diagnostics with ping |
-
-### 📧 **Communication**
-| Function | Language | Description |
-|----------|----------|-------------|
-| [send-mail-smtp](./ts/send-mail-smtp) | TypeScript | Send email via SMTP with nodemailer |
-| [send-mail-resend](./ts/send-mail-resend) | TypeScript | Modern email via [Resend](https://resend.com/) API |
-| [send-mail-smtp](./go/send-mail-smtp) | Go | Email sending with Go SMTP |
-| [send-mail-resend](./go/send-mail-resend) | Go | Resend integration for Go |
-
-### 🗄️ **Database**
-| Function | Language | Description |
-|----------|----------|-------------|
-| [postgres-db](./ts/postgres-db) | TypeScript | PostgreSQL database operations |
-
-## 💡 How It Works
-
-Each example demonstrates the YoMo pattern:
-
-**TypeScript Functions:**
 ```typescript
-// 1. Define what your function does
 export const description = 'Get current weather for a city'
 
-// 2. Define typed arguments
 export type Argument = {
   city: string
   latitude: number
   longitude: number
 }
 
-// 3. Implement your logic
 export async function handler(args: Argument) {
-  // Your AI agent logic here
   return weatherData
 }
 ```
 
-**Go Functions:**
+Go examples use this shape:
+
 ```go
-// 1. Describe the function
 const Description = "Get current weather for a city"
 
-// 2. Define typed arguments
 type Arguments struct {
-  City      string  `json:"city"`
-  Latitude  float64 `json:"latitude"`
-  Longitude float64 `json:"longitude"`  
+	City      string  `json:"city"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
 }
 
-// 3. Handle requests
 func Handler(args Arguments) (any, error) {
-  // Your AI agent logic here
-  return weatherData, nil
+	return weatherData, nil
 }
 ```
-
-## 🚀 Next Steps
-
-### 🏗️ **Build Your Own Function**
-```bash
-# Create new function from template
-yomo init my-awesome-function
-
-# Run locally
-yomo run
-```
-
-### 🌐 **Deploy Anywhere**
-
-**☁️ Managed Cloud**: Use [VivGrid](https://console.vivgrid.com/) for instant deployment with global edge locations.
-
-**🏠 Self-Host**: Deploy on your own infrastructure:
-- [Self-Hosting Guide](https://yomo.run/docs/self-hosting) - Full control over your deployment
-- [Geo-distributed Setup](https://yomo.run/docs/glossary) - Multi-region for global performance
-- Kubernetes, Docker, or bare metal support
-
-### 📖 **Resources**
-- **[YoMo Documentation](https://yomo.run/docs)** - Complete guides and API reference
-- **[LLM Providers](https://yomo.run/docs/llm-providers)** - Integrate with any LLM
-- **[GitHub](https://github.com/yomorun/yomo)** - Star us and contribute!
-
----
-
-**Ready to build the future of AI agents?** Start with YoMo today! 🎉
-
-[![GitHub stars](https://img.shields.io/github/stars/yomorun/yomo?style=social)](https://github.com/yomorun/yomo)
-[![Documentation](https://img.shields.io/badge/docs-yomo.run-blue)](https://yomo.run/docs)
-[![Discord](https://img.shields.io/discord/770589787404640267?label=discord&logo=discord)](https://discord.gg/CTH3wv9)
