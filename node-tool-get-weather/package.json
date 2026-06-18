@@ -1,19 +1,13 @@
 {
-  "name": "tool-node-get-weather",
-  "version": "1.0.0",
-  "description": "LLM Function Calling - Get Weather",
-  "main": ".wrapper.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "name": "get-weather",
+  "version": "0.1.0",
+  "private": true,
   "devDependencies": {
-    "@types/node": "^22.10.1",
-    "typescript": "^5.7.2"
+    "@types/node": "^25.5.2",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "^6.0.2"
   },
   "dependencies": {
-    "@yomo/sfn": "^1.1.0",
-    "dotenv": "^16.4.7"
+    "dotenv": "^17.4.2"
   }
 }

@@ -20,13 +20,16 @@ export type Argument = {
 }
 
 async function getWeather(args: Argument) {
+  console.log("openweather key:", process.env.OPENWEATHERMAP_API_KEY)
   console.log('city: ', args.city, 'latitude: ', args.latitude, 'longitude: ', args.longitude)
   try {
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${args.latitude}&lon=${args.longitude}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`)
     if (!response.ok) {
+      console.error(response.statusText, response.status, response.body)
       return 'can not get the weather information at the moment'
     }
     const data = await response.json()
+    console.log('data: ', data)
     return data
   } catch (error) {
     console.error(error)
