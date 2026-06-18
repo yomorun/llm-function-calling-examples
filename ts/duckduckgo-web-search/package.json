@@ -1,0 +1,14 @@
+{
+  "name": "duckduckgo-web-search",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "duck-duck-scrape": "^2.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "^6.0.2"
+  }
+}

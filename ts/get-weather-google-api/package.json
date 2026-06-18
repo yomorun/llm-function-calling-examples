@@ -1,0 +1,19 @@
+{
+  "name": "get-weather-google-api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "socks-proxy-agent": "^8.0.5"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node-fetch": "^2.6.12",
+    "@types/node": "^25.5.2",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "^6.0.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "send-mail-resend",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "resend": "^3.2.0"
+  }
+}

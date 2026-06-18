@@ -22,7 +22,7 @@ This repository showcases real-world examples of LLM Function Calling using [YoM
 curl -fsSL https://get.yomo.run | sh
 
 # Run any example
-cd node-tool-get-weather
+cd ts/get-weather
 yomo run -n get-weather
 ```
 
@@ -38,7 +38,7 @@ yomo run -n get-weather
 1. **Clone and run an example:**
 ```bash
 git clone https://github.com/yomorun/llm-function-calling-examples.git
-cd llm-function-calling-examples/node-tool-get-weather
+cd llm-function-calling-examples/ts/get-weather
 yomo run -n get-weather
 ```
 
@@ -64,41 +64,41 @@ Explore real-world serverless functions organized by category:
 ### 🌦️ **Weather & Location**
 | Function | Language | Description |
 |----------|----------|-------------|
-| [node-tool-get-weather](./node-tool-get-weather) | TypeScript | Get weather by city using OpenWeatherMap API |
-| [node-tool-get-weather-google-api](./node-tool-get-weather-google-api) | TypeScript | Get weather using Google Weather API |
-| [golang-tool-get-weather](./golang-tool-get-weather) | Go | Weather information with geo-coordinates |
-| [node-tool-get-utc-time](./node-tool-get-utc-time) | TypeScript | Get UTC time by city name |
-| [golang-tool-get-utc-time](./golang-tool-get-utc-time) | Go | UTC time lookup |
-| [golang-tool-timezone-calculator](./golang-tool-timezone-calculator) | Go | Calculate timezone for specific time |
+| [get-weather](./ts/get-weather) | TypeScript | Get weather by city using OpenWeatherMap API |
+| [get-weather-google-api](./ts/get-weather-google-api) | TypeScript | Get weather using Google Weather API |
+| [get-weather](./go/get-weather) | Go | Weather information with geo-coordinates |
+| [get-utc-time](./ts/get-utc-time) | TypeScript | Get UTC time by city name |
+| [get-utc-time](./go/get-utc-time) | Go | UTC time lookup |
+| [timezone-calculator](./go/timezone-calculator) | Go | Calculate timezone for specific time |
 
 ### 💰 **Financial & Data**
 | Function | Language | Description |
 |----------|----------|-------------|
-| [node-tool-currency-converter](./node-tool-currency-converter) | TypeScript | Real-time currency conversion |
-| [golang-tool-currency-converter](./golang-tool-currency-converter) | Go | Currency calculator with live rates |
+| [currency-converter](./ts/currency-converter) | TypeScript | Real-time currency conversion |
+| [currency-converter](./go/currency-converter) | Go | Currency calculator with live rates |
 
 ### 🔍 **Web Search & Network**
 | Function | Language | Description |
 |----------|----------|-------------|
-| [node-tool-exa-web-search](./node-tool-exa-web-search) | TypeScript | Search using [Exa](https://exa.ai) |
-| [node-tool-google-web-search](./node-tool-google-web-search) | TypeScript | Search using Google Custom Search |
-| [node-tool-tavily-web-search](./node-tool-tavily-web-search) | TypeScript | Web search via [Tavily](https://tavily.com/) |
-| [node-tool-duckduckgo-web-search](./node-tool-duckduckgo-web-search) | TypeScript | Privacy-focused DuckDuckGo search |
-| [node-tool-get-ip-and-latency](./node-tool-get-ip-and-latency) | TypeScript | Get IP and latency for websites |
-| [golang-tool-get-ip-and-latency](./golang-tool-get-ip-and-latency) | Go | Network diagnostics with ping |
+| [exa-web-search](./ts/exa-web-search) | TypeScript | Search using [Exa](https://exa.ai) |
+| [google-web-search](./ts/google-web-search) | TypeScript | Search using Google Custom Search |
+| [tavily-web-search](./ts/tavily-web-search) | TypeScript | Web search via [Tavily](https://tavily.com/) |
+| [duckduckgo-web-search](./ts/duckduckgo-web-search) | TypeScript | Privacy-focused DuckDuckGo search |
+| [get-ip-and-latency](./ts/get-ip-and-latency) | TypeScript | Get IP and latency for websites |
+| [get-ip-and-latency](./go/get-ip-and-latency) | Go | Network diagnostics with ping |
 
 ### 📧 **Communication**
 | Function | Language | Description |
 |----------|----------|-------------|
-| [node-tool-send-mail-smtp](./node-tool-send-mail-smtp) | TypeScript | Send email via SMTP with nodemailer |
-| [node-tool-send-mail-resend](./node-tool-send-mail-resend) | TypeScript | Modern email via [Resend](https://resend.com/) API |
-| [golang-tool-send-mail-smtp](./golang-tool-send-mail-smtp) | Go | Email sending with Go SMTP |
-| [golang-tool-send-mail-resend](./golang-tool-send-mail-resend) | Go | Resend integration for Go |
+| [send-mail-smtp](./ts/send-mail-smtp) | TypeScript | Send email via SMTP with nodemailer |
+| [send-mail-resend](./ts/send-mail-resend) | TypeScript | Modern email via [Resend](https://resend.com/) API |
+| [send-mail-smtp](./go/send-mail-smtp) | Go | Email sending with Go SMTP |
+| [send-mail-resend](./go/send-mail-resend) | Go | Resend integration for Go |
 
 ### 🗄️ **Database**
 | Function | Language | Description |
 |----------|----------|-------------|
-| [node-tool-postgres-db](./node-tool-postgres-db) | TypeScript | PostgreSQL database operations |
+| [postgres-db](./ts/postgres-db) | TypeScript | PostgreSQL database operations |
 
 ## 💡 How It Works
 
@@ -126,20 +126,19 @@ export async function handler(args: Argument) {
 **Go Functions:**
 ```go
 // 1. Describe the function
-func Description() string {
-  return "Get current weather for a city"
-}
+const Description = "Get current weather for a city"
 
-// 2. Define schema
-type LLMArguments struct {
+// 2. Define typed arguments
+type Arguments struct {
   City      string  `json:"city"`
   Latitude  float64 `json:"latitude"`
   Longitude float64 `json:"longitude"`  
 }
 
 // 3. Handle requests
-func Handler(ctx serverless.Context) {
+func Handler(args Arguments) (any, error) {
   // Your AI agent logic here
+  return weatherData, nil
 }
 ```
 

@@ -1,0 +1,14 @@
+{
+  "name": "get-ip-and-latency",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@types/ping": "^0.4.4",
+    "@types/node": "^25.5.2",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "ping": "^0.4.4"
+  }
+}

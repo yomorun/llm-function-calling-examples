@@ -1,0 +1,15 @@
+{
+  "name": "postgres-db",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@types/pg": "^8.10.9",
+    "@types/node": "^25.5.2",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.11.3"
+  }
+}
