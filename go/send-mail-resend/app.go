@@ -35,22 +35,31 @@ type Arguments struct {
 	Body    string `json:"body" jsonschema:"description=The content of the email"`
 }
 
+type Result struct {
+	To      string `json:"to"`
+	From    string `json:"from"`
+	Subject string `json:"subject"`
+	ID      string `json:"id"`
+	Sent    bool   `json:"sent"`
+}
+
 // Handler orchestrates the core processing logic of this function
-func Handler(args Arguments) string {
+func Handler(args Arguments) (Result, error) {
 	result, err := sendEmail(args)
 	if err != nil {
-		return fmt.Sprintf("Failed to send email: %v", err)
+		return Result{}, err
 	}
 
 	slog.Info("send-email", "to", args.To, "result", result)
-	return result
+	return result, nil
 }
 
-func sendEmail(args Arguments) (string, error) {
+func sendEmail(args Arguments) (Result, error) {
 	slog.Info("send-email", "args", args)
 
+	fromEmail := os.Getenv("FROM_EMAIL")
 	params := &resend.SendEmailRequest{
-		From:    os.Getenv("FROM_EMAIL"),
+		From:    fromEmail,
 		To:      []string{args.To},
 		Subject: args.Subject,
 		Html:    fmt.Sprintf("<p>%s</p>", args.Body),
@@ -58,8 +67,14 @@ func sendEmail(args Arguments) (string, error) {
 
 	resp, err := client.Emails.Send(params)
 	if err != nil {
-		return "", fmt.Errorf("failed to send email: %w", err)
+		return Result{}, fmt.Errorf("failed to send email: %w", err)
 	}
 
-	return fmt.Sprintf("Email has been successfully sent to %s with ID: %s", args.To, resp.Id), nil
+	return Result{
+		To:      args.To,
+		From:    fromEmail,
+		Subject: args.Subject,
+		ID:      resp.Id,
+		Sent:    true,
+	}, nil
 }

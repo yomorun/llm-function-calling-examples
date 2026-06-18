@@ -24,10 +24,18 @@ type Arguments struct {
 	TargetTimezone string `json:"targetTimezone" jsonschema:"description=The target timezone to convert the timeString to, in IANA Time Zone Database identifier format"`
 }
 
+type Result struct {
+	SourceTime     string `json:"sourceTime"`
+	SourceTimezone string `json:"sourceTimezone"`
+	TargetTime     string `json:"targetTime"`
+	TargetTimezone string `json:"targetTimezone"`
+	Format         string `json:"format"`
+}
+
 const timeFormat = "2006-01-02 15:04:05"
 
 // Handler orchestrates the core processing logic of this function.
-func Handler(args Arguments) string {
+func Handler(args Arguments) (Result, error) {
 	slog.Info("parse arguments", "source", args.SourceTimezone, "target", args.TargetTimezone, "time", args.TimeString)
 
 	if args.TargetTimezone == "" {
@@ -42,10 +50,16 @@ func Handler(args Arguments) string {
 	targetTime, err := ConvertTimezone(args.TimeString, args.SourceTimezone, args.TargetTimezone)
 	if err != nil {
 		slog.Error("[sfn] ConvertTimezone error", "err", err)
-		return "can not convert the time right now, please try later"
+		return Result{}, err
 	}
 
-	return fmt.Sprintf("This time in timezone %s is %s when %s in %s", args.TargetTimezone, targetTime, args.TimeString, args.SourceTimezone)
+	return Result{
+		SourceTime:     args.TimeString,
+		SourceTimezone: args.SourceTimezone,
+		TargetTime:     targetTime,
+		TargetTimezone: args.TargetTimezone,
+		Format:         timeFormat,
+	}, nil
 }
 
 // ConvertTimezone converts the current time from the source timezone to the target timezone.

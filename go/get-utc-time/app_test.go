@@ -6,8 +6,11 @@ import (
 )
 
 func TestHandler(t *testing.T) {
-	got := Handler()
-	if !strings.HasPrefix(got, "current UTC time is ") {
-		t.Errorf("Handler() = %q, want UTC time prefix", got)
+	got, err := Handler()
+	if err != nil {
+		t.Fatalf("Handler() error = %v", err)
+	}
+	if got.CurrentUTC == "" || strings.HasPrefix(got.CurrentUTC, "current UTC time is ") {
+		t.Errorf("Handler() = %q, want raw UTC timestamp", got.CurrentUTC)
 	}
 }

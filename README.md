@@ -165,7 +165,11 @@ type Arguments struct {
 	Longitude float64 `json:"longitude"`
 }
 
-func Handler(args Arguments) (any, error) {
-	return weatherData, nil
+type Result struct {
+	Weather any `json:"weather"`
+}
+
+func Handler(args Arguments) (Result, error) {
+	return Result{Weather: weatherData}, nil
 }
 ```

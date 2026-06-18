@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"log/slog"
 	"net"
 	"time"
@@ -23,29 +23,43 @@ type Arguments struct {
 	Domain string `json:"domain" jsonschema:"description=Domain of the website,example=example.com"`
 }
 
+type Result struct {
+	Domain        string   `json:"domain"`
+	IPs           []string `json:"ips"`
+	SelectedIP    string   `json:"selectedIP"`
+	AvgLatencyMS  float64  `json:"avgLatencyMs"`
+	AvgLatency    string   `json:"avgLatency"`
+	PacketLoss    float64  `json:"packetLoss"`
+	PacketsSent   int      `json:"packetsSent"`
+	PacketsRecv   int      `json:"packetsRecv"`
+	ICMPAvailable bool     `json:"icmpAvailable"`
+}
+
 // Handler orchestrates the core processing logic of this function.
-func Handler(args Arguments) string {
+func Handler(args Arguments) (Result, error) {
 	if args.Domain == "" {
 		slog.Warn("[sfn] domain is empty")
-		return "can not get the domain name right now, please try again later"
+		return Result{}, errors.New("domain is empty")
 	}
 
 	// get ip of the domain
 	ips, err := net.LookupIP(args.Domain)
 	if err != nil {
 		slog.Error("[sfn] could not get IPs", "err", err)
-		return "can not get the domain name right now, please try again later"
+		return Result{}, err
 	}
 
+	ipStrings := make([]string, 0, len(ips))
 	for _, ip := range ips {
 		slog.Info("[sfn] get ip", "domain", args.Domain, "ip", ip)
+		ipStrings = append(ipStrings, ip.String())
 	}
 
 	// get ip[0] ping latency
 	pinger, err := ping.NewPinger(ips[0].String())
 	if err != nil {
 		slog.Error("[sfn] could not create pinger", "err", err)
-		return "can not get the domain name right now, please try again later"
+		return Result{}, err
 	}
 
 	pinger.Count = 3
@@ -53,15 +67,17 @@ func Handler(args Arguments) string {
 	pinger.Run()                     // blocks until finished
 	stats := pinger.Statistics()     // get send/receive/rtt stats
 
-	slog.Info("[sfn] get ping latency", "domain", args.Domain, "ip", ips[0], "latency", stats.AvgRtt, "PacketLoss", fmt.Sprintf("%f%%", stats.PacketLoss))
+	slog.Info("[sfn] get ping latency", "domain", args.Domain, "ip", ips[0], "latency", stats.AvgRtt, "PacketLoss", stats.PacketLoss)
 
-	var res string
-
-	if stats.AvgRtt == 0 {
-		res = fmt.Sprintf("domain %s has ip %s, but it does not support ICMP protocol or network is unavailable now, so I can not get the latency data", args.Domain, ips[0])
-	} else {
-		res = fmt.Sprintf("domain %s has ip %s with average latency %s, make sure answer with the IP address and Latency", args.Domain, ips[0], stats.AvgRtt)
-	}
-
-	return res
+	return Result{
+		Domain:        args.Domain,
+		IPs:           ipStrings,
+		SelectedIP:    ips[0].String(),
+		AvgLatencyMS:  float64(stats.AvgRtt) / float64(time.Millisecond),
+		AvgLatency:    stats.AvgRtt.String(),
+		PacketLoss:    stats.PacketLoss,
+		PacketsSent:   stats.PacketsSent,
+		PacketsRecv:   stats.PacketsRecv,
+		ICMPAvailable: stats.AvgRtt > 0,
+	}, nil
 }

@@ -24,8 +24,16 @@ type Arguments struct {
 	Amount         float64 `json:"amount" jsonschema:"description=The amount of the currency to be converted to the target currency"`
 }
 
+type Result struct {
+	SourceCurrency  string  `json:"sourceCurrency"`
+	TargetCurrency  string  `json:"targetCurrency"`
+	Amount          float64 `json:"amount"`
+	Rate            float64 `json:"rate"`
+	ConvertedAmount float64 `json:"convertedAmount"`
+}
+
 // Handler orchestrates the core processing logic of this function.
-func Handler(args Arguments) string {
+func Handler(args Arguments) (Result, error) {
 	// debug info
 	slog.Info("[sfn] << receive", "data", fmt.Sprintf("%+v", args))
 
@@ -34,17 +42,19 @@ func Handler(args Arguments) string {
 	rate, err := fetchRate(args.SourceCurrency, args.TargetCurrency, args.Amount)
 	if err != nil {
 		slog.Error("[sfn] >> fetchRate error", "err", err)
-		return "can not get the target currency right now, please try later"
+		return Result{}, err
 	}
 
-	// request openexchangerates.org API to get the exchange rate
-	result := fmt.Sprintf("based on today's exchange rate: %f, %f %s is equivalent to approximately %f %s", rate, args.Amount, args.SourceCurrency, args.Amount*rate, args.TargetCurrency)
+	result := Result{
+		SourceCurrency:  args.SourceCurrency,
+		TargetCurrency:  args.TargetCurrency,
+		Amount:          args.Amount,
+		Rate:            rate,
+		ConvertedAmount: args.Amount * rate,
+	}
 	slog.Info("[sfn] >> result", "result", result)
-	if rate == 0 {
-		result = fmt.Sprintf("can not understand the target currency %s", args.TargetCurrency)
-	}
 
-	return result
+	return result, nil
 }
 
 type Rates struct {

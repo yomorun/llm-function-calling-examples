@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -13,10 +12,13 @@ import (
 // documentation at: https://platform.openai.com/docs/guides/function-calling
 const Description = `Get current date and time in realtime, returned as UTC time string`
 
+type Result struct {
+	CurrentUTC string `json:"currentUTC"`
+}
+
 // Handler orchestrates the core processing logic of this function.
-func Handler() string {
+func Handler() (Result, error) {
 	// get current time
-	now := fmt.Sprintf("current UTC time is %s", time.Now().UTC().Format(time.RFC3339))
-	fmt.Println(now)
-	return now
+	now := time.Now().UTC().Format(time.RFC3339)
+	return Result{CurrentUTC: now}, nil
 }

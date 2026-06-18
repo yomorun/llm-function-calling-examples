@@ -17,8 +17,17 @@ type Arguments struct {
 	Body    string `json:"body" jsonschema:"description=Email content"`
 }
 
+type Result struct {
+	To       string `json:"to"`
+	From     string `json:"from"`
+	Subject  string `json:"subject"`
+	SMTPHost string `json:"smtpHost"`
+	SMTPPort string `json:"smtpPort"`
+	Sent     bool   `json:"sent"`
+}
+
 // Handler processes the email sending logic
-func Handler(args Arguments) string {
+func Handler(args Arguments) (Result, error) {
 	slog.Info("send-mail", "args", args)
 
 	// Get email configuration from environment variables
@@ -40,8 +49,15 @@ func Handler(args Arguments) string {
 
 	if err != nil {
 		slog.Error("Failed to send email", "error", err)
-		return "Failed to send email, please try again later"
+		return Result{}, err
 	}
 
-	return fmt.Sprintf("Email has been successfully sent to %s", args.To)
+	return Result{
+		To:       args.To,
+		From:     fromEmail,
+		Subject:  args.Subject,
+		SMTPHost: smtpHost,
+		SMTPPort: smtpPort,
+		Sent:     true,
+	}, nil
 }
